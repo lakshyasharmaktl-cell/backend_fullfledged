@@ -1,0 +1,26 @@
+import express from "express"
+import mongoose from "mongoose"
+import dotenv from "dotenv"
+import cors from "cors"
+import nodemon from "nodemon"
+import routes from './routes/routes.js'
+
+
+
+
+const app = express()
+const PORT = 1234
+
+
+dotenv.config()
+app.use(cors())
+app.use(express.json())
+
+
+mongoose.connect(process.env.MongoDBUrl)
+    .then(() => console.log('MongoDB connected ...'))
+    .catch((err) => console.log('MongoDB error =>', err.message))
+
+app.use('/',routes)
+
+app.listen(PORT, () => console.log('server is running', PORT))

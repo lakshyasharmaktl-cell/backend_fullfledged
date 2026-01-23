@@ -16,11 +16,15 @@ dotenv.config()
 app.use(cors())
 app.use(express.json())
 
+ 
+    
+
+
 
 mongoose.connect(process.env.MongoDBUrl)
     .then(() => console.log('MongoDB connected ...'))
     .catch((err) => console.log('MongoDB error =>', err.message))
 
-app.use('/',routes)
+app.use('/', routes)
 
 app.listen(PORT, () => console.log('server is running', PORT))

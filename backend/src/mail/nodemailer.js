@@ -2,11 +2,10 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 dotenv.config()
 
-// For production, replace with your actual SMTP server details.
 const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // Use true for port 465, false for port 587
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, 
     auth: {
         user: process.env.Nodemailerusername,
         pass: process.env.Nodemailerpassword,

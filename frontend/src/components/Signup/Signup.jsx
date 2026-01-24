@@ -32,7 +32,7 @@ export default function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:1234/laxxy", // 🔁 your backend endpoint
+        "http://localhost:1234/laxxy", 
         formData
       );
 

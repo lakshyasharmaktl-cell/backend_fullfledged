@@ -7,21 +7,17 @@ import routes from './routes/routes.js'
 
 
 
+dotenv.config() 
 
 const app = express()
 const PORT = 1234
 
-
-dotenv.config()
+ 
 app.use(cors())
 app.use(express.json())
+const MONGODB_URI = "mongodb+srv://bansalkunal2510_db_user:tj4juCPE9q32HO1z@cluster0.vfwkj91.mongodb.net/"
 
- 
-    
-
-
-
-mongoose.connect(process.env.MongoDBUrl)
+mongoose.connect(MONGODB_URI)
     .then(() => console.log('MongoDB connected ...'))
     .catch((err) => console.log('MongoDB error =>', err.message))
 

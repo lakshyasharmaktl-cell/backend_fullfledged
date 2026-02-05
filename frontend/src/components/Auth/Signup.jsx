@@ -43,11 +43,9 @@ export default function Signup() {
         formData
       );
 
-      toast.success(response.data?.msg || "OTP sent to your email ");
-
-      navigate("/otp", {
-        state: { email: formData.email }
-      });
+      toast.success(response?.data?.msg || "OTP sent to your email ");
+      
+      navigate(`/otp/${response?.data?.id}`);
 
     } catch (err) {
       toast.error(err.response?.data?.msg || "Server error. Try again.");

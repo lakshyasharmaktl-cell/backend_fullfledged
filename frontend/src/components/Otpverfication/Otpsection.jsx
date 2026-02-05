@@ -121,7 +121,6 @@ export default function Otpsection() {
     } catch (err) {
       toast.error(err.response?.data?.msg || "Invalid OTP. Please try again.");
       
-      // Shake animation effect
       inputRefs.current.forEach(input => {
         if (input) {
           input.classList.add('animate-shake');
@@ -141,12 +140,12 @@ export default function Otpsection() {
     try {
       setResending(true);
       
-      await axios.post("http://localhost:1234/resend_otp", { email });
+      await axios.post("http://localhost:1234/verify_otp:id", { email });
       
       toast.success("New OTP sent to your email!");
       setTimer(60);
       setIsTimerActive(true);
-      setOtp(["", "", "", "", "", ""]);
+      setOtp(["", "", "", ""]);
       inputRefs.current[0]?.focus();
       
     } catch (err) {
@@ -180,7 +179,7 @@ export default function Otpsection() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 px-4 py-8 ">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -220,7 +219,7 @@ export default function Otpsection() {
                 variants={itemVariants}
                 className="text-blue-200 mb-2"
               >
-                Enter the 6-digit verification code sent to
+                Enter the 4-digit verification code sent to
               </motion.p>
               
               <motion.div 

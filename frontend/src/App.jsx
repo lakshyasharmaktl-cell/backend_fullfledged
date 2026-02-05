@@ -41,13 +41,13 @@ export default function App() {
           
 
           {/* Private Routes */}
-          <Route path="/otp" element={<Otp />} />
+          <Route path="/otp/:id" element={<Otp />} />
           <Route path="/dashboard" element={<DashBoard />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>
 
-        {/* <Footer /> */}
+        <Footer />
       </BrowserRouter>
     </div>
   );

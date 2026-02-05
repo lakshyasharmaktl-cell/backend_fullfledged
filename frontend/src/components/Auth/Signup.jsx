@@ -2,122 +2,192 @@ import React, { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-  // 🔹 Form State
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    gender: "",
     password: "",
+    confirmPassword: "",
   });
 
-  // 🔹 Password Toggle
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
 
-  // 🔹 Handle Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🔹 Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🔸 Basic validation
-    if (!formData.name || !formData.email || !formData.password) {
-      toast.warning("All fields are required");
+    if (!formData.name || !formData.email || !formData.password || !formData.gender) {
+      toast.warning("All fields are required to join the club");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
       return;
     }
 
     try {
       const response = await axios.post(
-        "http://localhost:1234/laxxy", 
+        "http://localhost:1234/laxxy",
         formData
       );
 
-      toast.success(response.data?.msg || "Signup successful");
+      toast.success(response.data?.msg || "OTP sent to your email ");
 
-      // 🔹 Reset form
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
+      navigate("/otp", {
+        state: { email: formData.email }
       });
+
     } catch (err) {
-      toast.error(err.response?.data?.msg || "Server error");
+      toast.error(err.response?.data?.msg || "Server error. Try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-black to-zinc-800">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-zinc-900 p-8 rounded-2xl shadow-xl border border-zinc-800"
-      >
-        <h1 className="text-3xl font-bold text-white text-center mb-6">
-          Sign Up
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-[#050a15] px-4 py-12">
+      <div className="flex w-full max-w-5xl bg-[#0a1128] rounded-3xl shadow-2xl overflow-hidden border border-white/10">
 
-        {/* Name */}
-        <div className="mb-4 relative">
-          <User className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            className="w-full pl-10 py-2 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+        <div className="hidden lg:flex lg:w-1/2 relative h-100 mt-20">
+          <img
+            src="https://res.cloudinary.com/dzskwfinc/image/upload/v1770129324/f06f9f04bb74b8c8b9fe6842dfabab07_qmh82b.gif"
+            alt="Whisky Aging"
+            className="absolute inset-0 w-full h-full object-cover brightness-50"
           />
         </div>
 
-        {/* Email */}
-        <div className="mb-4 relative">
-          <Mail className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            className="w-full pl-10 py-2 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
-          />
+        {/* FORM */}
+        <div className="w-full lg:w-1/2 p-8 md:p-12">
+          <h2 className="text-3xl font-bold text-white mb-6">
+            Create Account
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+
+            {/* NAME */}
+            <div>
+              <label className="block text-xs text-amber-500 mb-1 uppercase">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white w-4 h-4" />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full pl-11 py-2.5 bg-[#111c44] text-white rounded-xl border border-white/10"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs text-amber-500 mb-1 uppercase" >
+                Email
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white w-4 h-4" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full pl-11 py-2.5 bg-[#111c44] text-white rounded-xl border border-white/10"
+                />
+              </div>
+            </div>
+
+            {/* GENDER */}
+            <div>
+              <label className="block text-xs text-amber-500 mb-2 uppercase">
+                Gender
+              </label>
+              <div className="flex gap-4">
+                {["Male", "Female", "Other"].map((g) => (
+                  <label key={g} className="flex-1">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={g}
+                      onChange={handleChange}
+                      className="hidden peer"
+                    />
+                    <div className="py-2 text-center bg-[#111c44] rounded-xl border border-white/10 peer-checked:border-amber-600 peer-checked:text-amber-500">
+                      {g}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* PASSWORD */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-amber-500 mb-1 uppercase">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+                  <input
+                    type={showPass ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-10 py-2.5 bg-[#111c44] text-white rounded-xl border border-white/10"
+                  />
+                  <div
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                  >
+                    {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs text-amber-500 mb-1 uppercase">
+                  Confirm
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+                  <input
+                    type={showConfirmPass ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full pl-11 pr-10 py-2.5 bg-[#111c44] text-white rounded-xl border border-white/10"
+                  />
+                  <div
+                    onClick={() => setShowConfirmPass(!showConfirmPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                  >
+                    {showConfirmPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* BUTTON */}
+            <button
+              type="submit"
+              className="w-full py-3 mt-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl"
+            >
+              Sign Up
+            </button>
+
+          </form>
         </div>
-
-        {/* Password */}
-        <div className="mb-6 relative">
-          <Lock className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Create password"
-            className="w-full pl-10 pr-10 py-2 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
-          />
-
-          {showPassword ? (
-            <EyeOff
-              onClick={() => setShowPassword(false)}
-              className="absolute right-3 top-3 text-gray-400 w-5 h-5 cursor-pointer"
-            />
-          ) : (
-            <Eye
-              onClick={() => setShowPassword(true)}
-              className="absolute right-3 top-3 text-gray-400 w-5 h-5 cursor-pointer"
-            />
-          )}
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-semibold hover:opacity-90 transition"
-        >
-          Create Account
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

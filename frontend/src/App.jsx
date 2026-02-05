@@ -1,21 +1,54 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Signup/Navbar";
-import Signup from "./components/Signup/Signup";
-import Otpsection from "./components/Signup/Otpsection";
-import Loginpage from "./components/Signup/Loginpage";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import Home from "./components/Home/Home.jsx";
+import SignUp from "./components/Auth/Signup.jsx";
+import Log from "./components/Auth/Loginpage.jsx";
+import Blog from "./components/Blog/Blog.jsx";
+import PageNotFound from "./components/PNF.jsx";
+import Footer from "./components/Footer.jsx";
+import ContactUs from "./components/ContactUs.jsx";
+import Otp from "./components/Otpverfication/Otpsection.jsx";
+import DashBoard from "./components/Dashboard/Homebashboard.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function App() {
   return (
-    <>
-      <Navbar />
+    <div className="bg-white dark:from-zinc-900 min-h-screen">
+      <BrowserRouter>
+        <Navbar />
+      <ToastContainer
 
-      <Routes>
-        <Route path="/" element={<Signup />} />
-        <Route path="/otp" element={<Otpsection />} />
-        <Route path="/login" element={<Loginpage />} />
-      </Routes>
-    </>
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/create-account" element={<SignUp />} />
+          <Route path="/user-login" element={<Log />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+
+          
+
+          {/* Private Routes */}
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/dashboard" element={<DashBoard />} />
+
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+
+        {/* <Footer /> */}
+      </BrowserRouter>
+    </div>
   );
 }

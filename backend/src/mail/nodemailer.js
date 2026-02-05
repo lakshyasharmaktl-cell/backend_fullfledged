@@ -1,23 +1,23 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 dotenv.config()
-
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true, 
-    auth: {
-        user: process.env.Nodemailerusername,
-        pass: process.env.Nodemailerpassword,
-    },
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.Nodemailerusername,
+    pass: process.env.Nodemailerpassword,
+  },
 });
+
 
 export const userotpsend = async(email,name,otp) => {
    try {
         const info = await transporter.sendMail({
-            from: `"${process.env.COMPANY_NAME || 'Bike Company'}" <${process.env.NODEMAILER_USER}>`,
+            from: `"${process.env.COMPANY_NAME || 'Zupee'}" <${process.env.NODEMAILER_USER}>`,
             to: email,
-            subject: `Your OTP for Secure Login - ${process.env.COMPANY_NAME || 'Bike Company'}`,
+            subject: `Your OTP for Secure Login - ${process.env.COMPANY_NAME || 'Zupee'}`,
             text: `Hi ${name},\n\nYour OTP for login is: ${otp}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\n${process.env.COMPANY_NAME || 'Bike Company'} Team`,
             html: `
 <!DOCTYPE html>

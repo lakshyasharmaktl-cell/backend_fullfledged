@@ -12,24 +12,24 @@ import Otp from "./components/Otpverfication/Otpsection.jsx";
 import DashBoard from "./components/Dashboard/Homebashboard.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Macllan from './components/Wiskhy/Macllaan.jsx';
 
 export default function App() {
   return (
-    <div className="bg-white dark:from-zinc-900 min-h-screen">
+    <div className="bg-white dark:bg-zinc-900 min-h-screen">
       <BrowserRouter>
         <Navbar />
-      <ToastContainer
-
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        pauseOnHover
-        draggable
-        theme="dark"
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="dark"
+        />
+        
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -38,12 +38,14 @@ export default function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact-us" element={<ContactUs />} />
 
-          
-
-          {/* Private Routes */}
+          {/* Private/Verification Routes */}
           <Route path="/otp/:id" element={<Otp />} />
           <Route path="/dashboard" element={<DashBoard />} />
 
+          
+          <Route path="/the-macallan" element={<Macllan />} />
+
+          {/* 404 Route */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
 

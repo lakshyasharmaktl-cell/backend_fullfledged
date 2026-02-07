@@ -1,0 +1,178 @@
+const slugify = (text) =>
+  text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
+
+export const BRANDS = {
+  "the-macallan": {
+    brandName: "The Macallan",
+    est: 1824,
+    country: "Scotland",
+    region: "Speyside",
+    themeColor: "#b38b00",
+    banner: {
+      title: "Crafted Since 1824",
+      subtitle: "An obsession with oak, a devotion to excellence.",
+      image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "Founded in 1824 by Alexander Reid, The Macallan is one of the world’s most respected single malt Scotch whisky producers, renowned for its exceptional sherry-seasoned oak casks.",
+    whiskies: [
+      {
+        id: "12-oak",
+        name: "Sherry Oak 12 Years Old",
+        est: 2018,
+        rating: 4.8,
+        image: "https://www.shutterstock.com/image-photo/jakarta-indonesia-september-20-2023photo-260nw-2364194921.jpg",
+        color: "Rich Gold",
+        nose: "Vanilla with ginger, dried fruits, sherry sweetness and wood smoke.",
+        palate: "Deliciously smooth with rich dried fruits, oak spice and sherry.",
+        finish: "Long, sweet toffee with gentle spice.",
+        abv: "40%",
+        cask: "Sherry Seasoned European Oak",
+      },
+    ],
+  },
+
+  "glenfiddich": {
+    brandName: "Glenfiddich",
+    est: 1887,
+    country: "Scotland",
+    region: "Speyside",
+    themeColor: "#1e8e3e",
+    banner: {
+      title: "Where Tradition Meets Innovation",
+      subtitle: "The world’s most awarded single malt.",
+      image: "https://images.unsplash.com/photo-1604908177522-040b48e6b42d?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "Founded in 1887 by William Grant, Glenfiddich pioneered single malt whisky as a global category and remains family-owned to this day.",
+    whiskies: [
+      {
+        id: "12-original",
+        name: "12 Years Old Original",
+        est: 1980,
+        rating: 4.6,
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b",
+        color: "Pale Gold",
+        nose: "Fresh pear and subtle oak.",
+        palate: "Creamy malt with orchard fruit.",
+        finish: "Clean, smooth and mellow.",
+        abv: "40%",
+        cask: "American Oak & European Oak",
+      },
+    ],
+  },
+
+  "johnnie-walker": {
+    brandName: "Johnnie Walker",
+    est: 1820,
+    country: "Scotland",
+    region: "Kilmarnock",
+    themeColor: "#caa24d",
+    banner: {
+      title: "Keep Walking",
+      subtitle: "The world’s leading Scotch whisky brand.",
+      image: "https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "Founded by John Walker in 1820, Johnnie Walker is famous for its iconic striding man and expertly blended Scotch whiskies.",
+    whiskies: [
+      {
+        id: "black-label",
+        name: "Black Label 12 Years",
+        est: 1909,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1510626176961-4b57d4fbad03",
+        color: "Deep Amber",
+        nose: "Smoky malt, vanilla and dried fruit.",
+        palate: "Balanced sweetness, spice and smoke.",
+        finish: "Long, warming and smoky.",
+        abv: "40%",
+        cask: "Refill & Re-charred Oak",
+      },
+    ],
+  },
+
+  "lagavulin": {
+    brandName: "Lagavulin",
+    est: 1816,
+    country: "Scotland",
+    region: "Islay",
+    themeColor: "#3d405b",
+    banner: {
+      title: "The King of Islay",
+      subtitle: "Intense, smoky, and rich single malts.",
+      image: "https://images.unsplash.com/photo-1569158062127-9b199d01c142?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "Lagavulin is famous for its slow distillation and peaty character, making it one of the most robust spirits in the world.",
+    whiskies: [
+      {
+        id: "16-year",
+        name: "16 Year Old",
+        est: 1987,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1527281473222-793895bf44f9",
+        color: "Deep Amber gold",
+        nose: "Intense peat smoke with iodine and seaweed.",
+        palate: "Dry peat smoke with gentle but strong sweetness.",
+        finish: "A long, elegant peat-filled finish.",
+        abv: "43%",
+        cask: "Oak Casks",
+      },
+    ],
+  },
+
+  "chivas-regal": {
+    brandName: "Chivas Regal",
+    est: 1801,
+    country: "Scotland",
+    region: "Speyside",
+    themeColor: "#8e1b1b",
+    banner: {
+      title: "Success is a Blend",
+      subtitle: "The world's first luxury whisky.",
+      image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "The Chivas brothers pioneered the art of blending, creating a smooth and generous style that conquered the world.",
+    whiskies: [
+      {
+        id: "18-gold",
+        name: "18 Year Old Gold Signature",
+        est: 1997,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1510626176961-4b57d4fbad03",
+        color: "Intense Amber",
+        nose: "Rich, indulgent, multi-layered aromas.",
+        palate: "Velvety, dark chocolate and elegant floral notes.",
+        finish: "Extremely warm and long finish.",
+        abv: "40%",
+        cask: "Fine Selected Casks",
+      },
+    ],
+  },
+
+  "the-balvenie": {
+    brandName: "The Balvenie",
+    est: 1892,
+    country: "Scotland",
+    region: "Speyside",
+    themeColor: "#c19a6b",
+    banner: {
+      title: "The Five Rare Crafts",
+      subtitle: "Handcrafted single malt from barley to bottle.",
+      image: "https://images.unsplash.com/photo-1508253195889-0f40f0984920?auto=format&fit=crop&w=1600&q=80",
+    },
+    heritage: "The Balvenie is the only distillery that still grows its own barley and employs its own coopers and coppersmiths.",
+    whiskies: [
+      {
+        id: "doublewood-12",
+        name: "DoubleWood 12 Year Old",
+        est: 1993,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a",
+        color: "Amber Gold",
+        nose: "Sweet fruit and Oloroso sherry notes.",
+        palate: "Smooth and mellow with nuttiness and cinnamon.",
+        finish: "Long and warming finish.",
+        abv: "40%",
+        cask: "Bourbon & Sherry Casks",
+      },
+    ],
+  },
+};

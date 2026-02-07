@@ -13,6 +13,7 @@ import DashBoard from "./components/Dashboard/Homebashboard.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Macllan from './components/Wiskhy/Macllaan.jsx';
+import Brandspage from './components/data/Brandspage.jsx'
 
 export default function App() {
   return (
@@ -30,24 +31,28 @@ export default function App() {
           theme="dark"
         />
         
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/create-account" element={<SignUp />} />
-          <Route path="/user-login" element={<Log />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/contact-us" element={<ContactUs />} />
+       <Routes>
+  {/* Public Routes */}
+  <Route path="/" element={<Home />} />
+  <Route path="/create-account" element={<SignUp />} />
+  <Route path="/user-login" element={<Log />} />
+  <Route path="/blog" element={<Blog />} />
+  <Route path="/contact-us" element={<ContactUs />} />
 
-          {/* Private/Verification Routes */}
-          <Route path="/otp/:id" element={<Otp />} />
-          <Route path="/dashboard" element={<DashBoard />} />
+  {/* Verification / Dashboard */}
+  <Route path="/otp/:id" element={<Otp />} />
+  <Route path="/dashboard" element={<DashBoard />} />
 
-          
-          <Route path="/the-macallan" element={<Macllan />} />
+  {/* Brand Pages */}
+  {/* OLD static Macallan page (optional – you can remove later) */}
+  <Route path="/the-macallan" element={<Macllan />} />
 
-          {/* 404 Route */}
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+  {/* NEW dynamic brand page (IMPORTANT) */}
+  <Route path="/brand/:brandSlug" element={<Brandspage />} />
+
+  {/* 404 */}
+  <Route path="*" element={<PageNotFound />} />
+</Routes>
 
         <Footer />
       </BrowserRouter>

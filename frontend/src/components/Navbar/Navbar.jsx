@@ -36,54 +36,57 @@ export default function Navbar() {
   const [hoverTimeout, setHoverTimeout] = useState(null);
 
   const MenuData = [
-    { 
-      icon: GlassWater, 
-      name: "Premium Whisky", 
-      dropdown: [
-        { icon: GlassWater, name: "The Macallan", link: "/the-macallan" },
-        { icon: Sparkles, name: "Glenfiddich", link: "/glenfiddich" },
-        { icon: Star, name: "Johnnie Walker", link: "/johnnie-walker" },
-        { icon: Wheat, name: "Lagavulin", link: "/lagavulin" },
-        { icon: Gem, name: "Chivas Regal", link: "/chivas-regal" },
-        { icon: Droplets, name: "The Balvenie", link: "/the-balvenie" }
-      ]
-    },
-    
-    { 
-      icon: Martini, 
-      name: "Mocktails", 
-      dropdown: [
-        { icon: Martini, name: "Virgin Mojito", link: "/virgin-mojito" },
-        { icon: CandyCane, name: "Shirley Temple", link: "/shirley-temple" },
-        { icon: Grape, name: "Fruit Punch", link: "/fruit-punch" },
-        { icon: Citrus, name: "Strawberry Cooler", link: "/strawberry cooler" }
-      ]
-    },
-    { 
-      icon: Beer, 
-      name: "Beers", 
-      dropdown: [
-        { icon: Beer, name: "Corona Extra", link: "/corona extrar" },
-        { icon: Beer, name: "kingfisher", link: "/kingfisher" },
-        { icon: Star, name: "Tuborg", link: "/tuborg" },
-        { icon: Coffee, name: "Budwieser", link: "/budwieser" },
-        { icon: Wheat, name: "knock out", link: "/knock outr" },
-        { icon: Beer, name: "Haywards", link: "/haywards" }
-      ]
-    },
-    { 
-      icon: GlassWater, 
-      name: "Spirits", 
-      dropdown: [
-        { icon: GlassWater, name: "Vodka", link: "/vodka" },
-        { icon: GlassWater, name: "Rum", link: "/rum" },
-        { icon: Martini, name: "Jameson", link: "/jameson" },
-        { icon: Star, name: "Grey Goose", link: "/grey goose" },
-        { icon: Wine, name: "Old Monk", link: "/old monk" },
-        { icon: Gem, name: "Captain Morgan ", link: "/captain morgan" }
-      ]
-    }
-  ];
+  { 
+    icon: GlassWater, 
+    name: "Premium Whisky", 
+    dropdown: [
+      { icon: GlassWater, name: "The Macallan", link: "/brand/the-macallan" },
+      { icon: Sparkles, name: "Glenfiddich", link: "/brand/glenfiddich" },
+      { icon: Star, name: "Johnnie Walker", link: "/brand/johnnie-walker" },
+      { icon: Wheat, name: "Lagavulin", link: "/brand/lagavulin" },
+      { icon: Gem, name: "Chivas Regal", link: "/brand/chivas-regal" },
+      { icon: Droplets, name: "The Balvenie", link: "/brand/the-balvenie" }
+    ]
+  },
+
+  { 
+    icon: Martini, 
+    name: "Mocktails", 
+    dropdown: [
+      { icon: Martini, name: "Virgin Mojito", link: "/virgin-mojito" },
+      { icon: CandyCane, name: "Shirley Temple", link: "/shirley-temple" },
+      { icon: Grape, name: "Fruit Punch", link: "/fruit-punch" },
+      { icon: Citrus, name: "Strawberry Cooler", link: "/strawberry-cooler" }
+    ]
+  },
+
+  { 
+    icon: Beer, 
+    name: "Beers", 
+    dropdown: [
+      { icon: Beer, name: "Corona Extra", link: "/corona-extra" },
+      { icon: Beer, name: "Kingfisher", link: "/kingfisher" },
+      { icon: Star, name: "Tuborg", link: "/tuborg" },
+      { icon: Coffee, name: "Budweiser", link: "/budweiser" },
+      { icon: Wheat, name: "Knock Out", link: "/knock-out" },
+      { icon: Beer, name: "Haywards", link: "/haywards" }
+    ]
+  },
+
+  { 
+    icon: GlassWater, 
+    name: "Spirits", 
+    dropdown: [
+      { icon: GlassWater, name: "Vodka", link: "/vodka" },
+      { icon: GlassWater, name: "Rum", link: "/rum" },
+      { icon: Martini, name: "Jameson", link: "/brand/jameson" },
+      { icon: Star, name: "Grey Goose", link: "/brand/grey-goose" },
+      { icon: Wine, name: "Old Monk", link: "/brand/old-monk" },
+      { icon: Gem, name: "Captain Morgan", link: "/brand/captain-morgan" }
+    ]
+  }
+];
+
 
   const Auth = [
     { name: 'Sign In', link: '/user-login', css: 'px-5 py-2.5 text-sm font-semibold rounded-lg hover:text-blue-300 transition-colors hover:bg-blue-700/50', icon: LogIn },

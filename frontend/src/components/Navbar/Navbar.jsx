@@ -1,481 +1,174 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  GlassWater,
-  Wine,
-  Beer,
-  Martini,
-  Star,
-  Sun,
-  Moon,
-  ChevronDown,
-  Menu,
-  Grape,
-  Wheat,
-  Sparkles,
-  Citrus,
-  Coffee,
-  CandyCane,
-  Droplets,
-  Gem,
-  LogIn,
-  UserPlus,
-  X
+import {
+  GlassWater, Beer, Martini, Star, ChevronDown, Menu, Grape, Wheat,
+  Sparkles, Citrus, Coffee, CandyCane, Droplets, Gem, LogIn, UserPlus, X,
+  Wine as WineBottle, ChevronRight
 } from 'lucide-react';
 import Profile from './Profile';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
-  const [dark, setDark] = useState(false);
   const [login, setLogIn] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileActiveDropdown, setMobileActiveDropdown] = useState(null);
-  const dropdownRef = useRef(null);
-  const mobileDropdownRef = useRef(null);
-  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   const MenuData = [
-  { 
-    icon: GlassWater, 
-    name: "Premium Whisky", 
-    dropdown: [
-      { icon: GlassWater, name: "The Macallan", link: "/brand/the-macallan" },
-      { icon: Sparkles, name: "Glenfiddich", link: "/brand/glenfiddich" },
-      { icon: Star, name: "Johnnie Walker", link: "/brand/johnnie-walker" },
-      { icon: Wheat, name: "Lagavulin", link: "/brand/lagavulin" },
-      { icon: Gem, name: "Chivas Regal", link: "/brand/chivas-regal" },
-      { icon: Droplets, name: "The Balvenie", link: "/brand/the-balvenie" }
-    ]
-  },
-
-  { 
-    icon: Martini, 
-    name: "Mocktails", 
-    dropdown: [
-      { icon: Martini, name: "Virgin Mojito", link: "/virgin-mojito" },
-      { icon: CandyCane, name: "Shirley Temple", link: "/shirley-temple" },
-      { icon: Grape, name: "Fruit Punch", link: "/fruit-punch" },
-      { icon: Citrus, name: "Strawberry Cooler", link: "/strawberry-cooler" }
-    ]
-  },
-
-  { 
-    icon: Beer, 
-    name: "Beers", 
-    dropdown: [
-      { icon: Beer, name: "Corona Extra", link: "/corona-extra" },
-      { icon: Beer, name: "Kingfisher", link: "/kingfisher" },
-      { icon: Star, name: "Tuborg", link: "/tuborg" },
-      { icon: Coffee, name: "Budweiser", link: "/budweiser" },
-      { icon: Wheat, name: "Knock Out", link: "/knock-out" },
-      { icon: Beer, name: "Haywards", link: "/haywards" }
-    ]
-  },
-
-  { 
-    icon: GlassWater, 
-    name: "Spirits", 
-    dropdown: [
-      { icon: GlassWater, name: "Vodka", link: "/vodka" },
-      { icon: GlassWater, name: "Rum", link: "/rum" },
-      { icon: Martini, name: "Jameson", link: "/brand/jameson" },
-      { icon: Star, name: "Grey Goose", link: "/brand/grey-goose" },
-      { icon: Wine, name: "Old Monk", link: "/brand/old-monk" },
-      { icon: Gem, name: "Captain Morgan", link: "/brand/captain-morgan" }
-    ]
-  }
-];
-
+    {
+      icon: GlassWater,
+      name: "Whisky",
+      dropdown: [
+        { icon: GlassWater, name: "The Macallan", link: "/brand/the-macallan" },
+        { icon: Sparkles, name: "Glenfiddich", link: "/brand/glenfiddich" },
+        { icon: Star, name: "Johnnie Walker", link: "/brand/johnnie-walker" },
+        { icon: Wheat, name: "Lagavulin", link: "/brand/lagavulin" },
+        { icon: Gem, name: "Chivas Regal", link: "/brand/chivas-regal" },
+        { icon: Droplets, name: "The Balvenie", link: "/brand/the-balvenie" }
+      ]
+    },
+    {
+      icon: Martini,
+      name: "Mocktails",
+      dropdown: [
+        { icon: Martini, name: "Virgin Mojito", link: "/brand/virgin-mojito" },
+        { icon: CandyCane, name: "Shirley Temple", link: "/brand/shirley-temple" },
+        { icon: Grape, name: "Fruit Punch", link: "/brand/fruit-punch" },
+        { icon: Citrus, name: "Strawberry Cooler", link: "/brand/strawberry-cooler" }
+      ]
+    },
+    {
+      icon: Beer,
+      name: "Beers",
+      dropdown: [
+        { icon: Beer, name: "Corona Extra", link: "/brand/corona-extra" },
+        { icon: Beer, name: "Kingfisher", link: "/brand/kingfisher" },
+        { icon: Star, name: "Tuborg", link: "/brand/tuborg" },
+        { icon: Coffee, name: "Budweiser", link: "/brand/budweiser" }
+      ]
+    },
+    {
+      icon: WineBottle,
+      name: "Spirits",
+      dropdown: [
+        { icon: GlassWater, name: "Vodka", link: "/brand/vodka" },
+        { icon: GlassWater, name: "Rum", link: "/brand/rum" },
+      ]
+    }
+  ];
 
   const Auth = [
-    { name: 'Sign In', link: '/user-login', css: 'px-5 py-2.5 text-sm font-semibold rounded-lg hover:text-blue-300 transition-colors hover:bg-blue-700/50', icon: LogIn },
-    { name: 'Sign Up Free', link: '/create-account', css: 'px-5 py-2.5 text-sm font-semibold bg-amber-600 text-white rounded-lg hover:bg-amber-500 transition-all duration-300 shadow-lg shadow-amber-600/30 hover:shadow-xl hover:shadow-amber-600/40 active:scale-95', icon: UserPlus },
+    { name: 'Sign In', link: '/user-login', css: 'px-4 py-2 text-[13px] font-medium rounded-lg border border-blue-800 hover:border-blue-500 hover:text-blue-300 transition-all bg-blue-900/20', icon: LogIn },
+    { name: 'Sign Up', link: '/create-account', css: 'px-5 py-2 text-[13px] font-bold bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-lg hover:from-amber-500 hover:to-amber-400 transition-all shadow-md active:scale-95', icon: UserPlus },
   ];
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setActiveDropdown(null);
-      }
-      if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target)) {
-        setMobileActiveDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [mobileMenuOpen]);
-
-  const handleMouseEnter = (index) => {
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
-    setActiveDropdown(index);
-  };
-
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 150);
-    setHoverTimeout(timeout);
-  };
-
-  const toggleDropdown = (index) => {
-    setActiveDropdown(activeDropdown === index ? null : index);
-  };
-
-  const toggleMobileDropdown = (index) => {
-    setMobileActiveDropdown(mobileActiveDropdown === index ? null : index);
-  };
-
-  const closeAllMenus = () => {
-    setMobileMenuOpen(false);
-    setMobileActiveDropdown(null);
-  };
-
-  const dropdownVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: -15,
-      scale: 0.95
-    },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.2,
-        ease: "easeOut",
-        staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      y: -15,
-      scale: 0.95,
-      transition: {
-        duration: 0.15,
-        ease: "easeIn"
-      }
-    }
-  };
-
-  const mobileDropdownVariants = {
-    hidden: { 
-      opacity: 0, 
-      height: 0,
-      overflow: 'hidden'
-    },
-    visible: { 
-      opacity: 1, 
-      height: 'auto',
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      height: 0,
-      transition: {
-        duration: 0.25,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -10 }
-  };
+  const isActiveLink = (link) => location.pathname === link;
+  const isActiveParent = (dropdown) => dropdown.some(subItem => isActiveLink(subItem.link));
 
   return (
-    <header className="fixed w-full top-0 z-50">
-      <nav className='flex items-center justify-between px-6 lg:px-12 py-5 bg-gradient-to-r from-blue-900 to-blue-800 dark:from-blue-950 dark:to-blue-900 text-white transition-colors duration-300 shadow-lg dark:shadow-blue-950/50'>
+    <header className={`fixed w-full top-0 z-[100] transition-all duration-300 ${
+      scrolled ? 'py-2 bg-blue-950/95 backdrop-blur-md shadow-lg border-b border-white/5' : 'py-4 bg-blue-950'
+    }`}>
+      <nav className='max-w-7xl mx-auto flex items-center justify-between px-4 lg:px-8 text-white'>
+        
+        {/* LOGO SECTION */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-blue-700/50 transition-colors"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden p-1.5 rounded-lg bg-blue-900/50">
+            <Menu className="w-5 h-5" />
           </button>
 
-          <h1 className="text-xl font-bold tracking-tighter">
-            <Link to="/" className="flex items-center gap-2 hover:text-amber-400 transition-colors" onClick={closeAllMenus}>
-              <GlassWater className="text-amber-400 w-7 h-7" />
-              <div className="flex flex-col">
-                <span className="text-white">WhiskyHub</span>
-                <span className="text-amber-400 text-sm font-normal">PREMIUM</span>
-              </div>
-            </Link>
-          </h1>
-        </div>
-
-        <div className="hidden lg:flex items-center gap-4 justify-center" ref={dropdownRef}>
-          {MenuData.map((item, index) => (
-            <div 
-              key={item.name} 
-              className="relative"
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              {item.dropdown ? (
-                <div>
-                  <button
-                    onClick={() => toggleDropdown(index)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg hover:bg-blue-700/30 transition-all duration-200 group"
-                  >
-                    <item.icon className="text-blue-200 group-hover:text-amber-300 group-hover:scale-110 transition-all w-5 h-5" />
-                    <span className="font-semibold text-white group-hover:text-amber-300 transition-colors">{item.name}</span>
-                    <div className="relative ml-1">
-                      <motion.div
-                        animate={{ rotate: activeDropdown === index ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ChevronDown className={`w-4 h-4 ${activeDropdown === index ? 'text-amber-400' : 'text-blue-300'}`} />
-                      </motion.div>
-                    </div>
-                  </button>
-
-                  <AnimatePresence>
-                    {activeDropdown === index && (
-                      <motion.div
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="absolute top-full left-0 mt-2 w-72 bg-gradient-to-b from-blue-800 to-blue-900 dark:from-blue-900 dark:to-blue-950 rounded-xl shadow-2xl border border-blue-700/50 overflow-hidden z-50"
-                        onMouseEnter={() => handleMouseEnter(index)}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <div className="py-1">
-                          {item.dropdown.map((subItem) => (
-                            <motion.div
-                              key={subItem.name}
-                              variants={itemVariants}
-                            >
-                              <Link
-                                to={subItem.link}
-                                className="flex items-center gap-4 px-4 py-3.5 hover:bg-blue-700/40 transition-colors border-b border-blue-600/30 last:border-b-0 group"
-                              >
-                                <motion.div 
-                                  className="p-2 rounded-lg bg-blue-700/30 group-hover:bg-amber-500/20 transition-colors"
-                                  whileHover={{ scale: 1.1 }}
-                                  transition={{ duration: 0.1 }}
-                                >
-                                  <subItem.icon className="text-amber-300 group-hover:text-amber-400 w-5 h-5 transition-colors" />
-                                </motion.div>
-                                <span className="font-semibold text-white group-hover:text-amber-300 transition-colors">{subItem.name}</span>
-                              </Link>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <Link
-                  to={item.link}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg hover:bg-blue-700/30 transition-all duration-200 group"
-                >
-                  <item.icon className="text-blue-200 group-hover:text-amber-300 group-hover:scale-110 transition-all w-5 h-5" />
-                  <span className="font-semibold text-white group-hover:text-amber-300 transition-colors">{item.name}</span>
-                </Link>
-              )}
+          <Link to="/" className="group flex items-center gap-2.5">
+            <img className='h-10 w-10 lg:h-12 lg:w-12 object-contain transition-transform group-hover:scale-105' src="https://res.cloudinary.com/dzskwfinc/image/upload/v1770712321/laxxy1_jkgenu.png" alt="Logo" />
+            <div className="flex flex-col leading-none">
+              <span className="text-lg lg:text-xl font-black tracking-tighter text-white uppercase">WhiskyHub</span>
+              <span className="text-amber-500 text-[8px] font-bold tracking-[0.2em] uppercase opacity-80">Premium</span>
             </div>
-          ))}
+          </Link>
         </div>
 
-        <div className='flex items-center gap-3'>
-          <button
-            onClick={() => setDark(!dark)}
-            className="p-2.5 rounded-full bg-blue-700/40 hover:ring-2 ring-amber-500/50 transition-all outline-none group"
-            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={dark ? "moon" : "sun"}
-                initial={{ y: -20, opacity: 0, rotate: -90 }}
-                animate={{ y: 0, opacity: 1, rotate: 0 }}
-                exit={{ y: 20, opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.2 }}
-              >
-                {dark ? (
-                  <Moon className="text-amber-300 group-hover:scale-110 transition-transform w-5 h-5" />
-                ) : (
-                  <Sun className="text-amber-400 group-hover:scale-110 transition-transform w-5 h-5" />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </button>
+        {/* DESKTOP MENU - Smaller Font & Spacing */}
+        <div className="hidden lg:flex items-center gap-1">
+          {MenuData.map((item, index) => {
+            const isParentActive = isActiveParent(item.dropdown);
+            return (
+              <div key={item.name} className="relative" onMouseEnter={() => setActiveDropdown(index)} onMouseLeave={() => setActiveDropdown(null)}>
+                <button className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all text-[13px] font-semibold tracking-wide ${isParentActive ? 'text-amber-400' : 'text-slate-300 hover:text-white'}`}>
+                  <item.icon className={`w-4 h-4 ${isParentActive ? 'text-amber-400' : 'text-blue-400'}`} />
+                  {item.name}
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeDropdown === index ? 'rotate-180' : 'opacity-50'}`} />
+                </button>
 
-          {login ? (
-            <Profile dark={dark} setDark={setDark} />
-          ) : (
+                <AnimatePresence>
+                  {activeDropdown === index && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+                      className="absolute top-full left-0 mt-1 w-64 bg-blue-950 border border-white/10 rounded-2xl shadow-xl overflow-hidden p-1.5 backdrop-blur-xl"
+                    >
+                      {item.dropdown.map((subItem) => (
+                        <Link key={subItem.name} to={subItem.link} className={`flex items-center justify-between p-2.5 rounded-lg text-[12px] font-bold uppercase tracking-wider transition-all ${isActiveLink(subItem.link) ? 'bg-amber-500/10 text-amber-400' : 'hover:bg-blue-900/50 text-slate-400 hover:text-white'}`}>
+                          <div className="flex items-center gap-3">
+                            <subItem.icon className="w-4 h-4 text-amber-500/80" />
+                            {subItem.name}
+                          </div>
+                          <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100" />
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ACTIONS */}
+        <div className='flex items-center gap-3'>
+          {login ? <Profile /> : (
             <div className="hidden md:flex items-center gap-2">
-              {Auth.map(({ name, link, css, icon: Icon }, index) => (
-                <Link key={index} to={link}>
-                  <button className={`flex items-center gap-2 ${css}`}>
-                    <Icon className="w-4 h-4" />
-                    {name}
-                  </button>
-                </Link>
+              {Auth.map((btn, i) => (
+                <Link key={i} to={btn.link} className={btn.css}>{btn.name}</Link>
               ))}
             </div>
           )}
         </div>
       </nav>
 
+      {/* MOBILE DRAWER */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-            onClick={closeAllMenus}
-          >
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute top-0 left-0 h-full w-4/5 max-w-sm bg-gradient-to-b from-blue-800 to-blue-900 dark:from-blue-900 dark:to-blue-950 shadow-2xl overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-              ref={mobileDropdownRef}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-3">
-                    <GlassWater className="text-amber-400 w-8 h-8" />
-                    <div className="flex flex-col">
-                      <span className="text-white text-xl font-bold">WhiskyHub</span>
-                      <span className="text-amber-400 text-sm">PREMIUM</span>
-                    </div>
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110]" />
+            <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} className="fixed top-0 left-0 h-full w-72 bg-blue-950 z-[120] p-6 shadow-2xl">
+              <div className="flex items-center justify-between mb-8">
+                <span className="text-lg font-black text-white italic">WHISKY<span className="text-amber-500">HUB</span></span>
+                <X className="w-5 h-5 cursor-pointer" onClick={() => setMobileMenuOpen(false)} />
+              </div>
+              <div className="space-y-2">
+                {MenuData.map((item, idx) => (
+                  <div key={idx} className="border-b border-white/5">
+                    <button onClick={() => setMobileActiveDropdown(mobileActiveDropdown === idx ? null : idx)} className="flex items-center justify-between w-full py-3 text-[12px] font-bold text-slate-300 uppercase tracking-widest">
+                      <div className="flex items-center gap-3"><item.icon className="w-4 h-4 text-amber-500" />{item.name}</div>
+                      <ChevronDown className={`w-4 h-4 ${mobileActiveDropdown === idx ? 'rotate-180' : ''}`} />
+                    </button>
+                    {mobileActiveDropdown === idx && (
+                      <div className="pb-3 pl-7 space-y-2">
+                        {item.dropdown.map(sub => (
+                          <Link key={sub.name} to={sub.link} onClick={() => setMobileMenuOpen(false)} className="block text-[11px] text-slate-400 hover:text-amber-400">{sub.name}</Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <button
-                    onClick={closeAllMenus}
-                    className="p-2 rounded-lg hover:bg-blue-700/50 transition-colors"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-
-                <div className="space-y-2">
-                  {MenuData.map((item, index) => (
-                    <div key={item.name} className="border-b border-blue-700/30 last:border-b-0">
-                      {item.dropdown ? (
-                        <>
-                          <button
-                            onClick={() => toggleMobileDropdown(index)}
-                            className="flex items-center justify-between w-full px-4 py-3 rounded-lg hover:bg-blue-700/30 transition-colors text-left"
-                          >
-                            <div className="flex items-center gap-3">
-                              <item.icon className="text-amber-400 w-5 h-5" />
-                              <span className="font-semibold text-white">{item.name}</span>
-                            </div>
-                            <motion.div
-                              animate={{ rotate: mobileActiveDropdown === index ? 180 : 0 }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <ChevronDown className={`w-4 h-4 ${mobileActiveDropdown === index ? 'text-amber-400' : 'text-blue-300'}`} />
-                            </motion.div>
-                          </button>
-
-                          <AnimatePresence>
-                            {mobileActiveDropdown === index && (
-                              <motion.div
-                                variants={mobileDropdownVariants}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                                className="overflow-hidden"
-                              >
-                                <div className="ml-10 space-y-1 py-2">
-                                  {item.dropdown.map((subItem) => (
-                                    <Link
-                                      key={subItem.name}
-                                      to={subItem.link}
-                                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-700/40 transition-colors text-white"
-                                      onClick={closeAllMenus}
-                                    >
-                                      <subItem.icon className="text-amber-300 w-4 h-4" />
-                                      <span className="text-sm">{subItem.name}</span>
-                                    </Link>
-                                  ))}
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      ) : (
-                        <Link
-                          to={item.link}
-                          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700/30 transition-colors text-white font-medium"
-                          onClick={closeAllMenus}
-                        >
-                          <item.icon className="text-amber-400 w-5 h-5" />
-                          <span>{item.name}</span>
-                        </Link>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-blue-700/30">
-                  <div className="space-y-3">
-                    {Auth.map(({ name, link, css, icon: Icon }, index) => (
-                      <Link key={index} to={link} onClick={closeAllMenus}>
-                        <button className={`flex items-center justify-center gap-2 w-full ${css}`}>
-                          <Icon className="w-4 h-4" />
-                          {name}
-                        </button>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 flex justify-center">
-                  <button
-                    onClick={() => setDark(!dark)}
-                    className="p-3 rounded-full bg-blue-700/40 hover:ring-2 ring-amber-500/50 transition-all outline-none group"
-                    aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.div
-                        key={dark ? "moon" : "sun"}
-                        initial={{ y: -20, opacity: 0, rotate: -90 }}
-                        animate={{ y: 0, opacity: 1, rotate: 0 }}
-                        exit={{ y: 20, opacity: 0, rotate: 90 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {dark ? (
-                          <Moon className="text-amber-300 group-hover:scale-110 transition-transform w-5 h-5" />
-                        ) : (
-                          <Sun className="text-amber-400 group-hover:scale-110 transition-transform w-5 h-5" />
-                        )}
-                      </motion.div>
-                    </AnimatePresence>
-                  </button>
-                </div>
+                ))}
               </div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

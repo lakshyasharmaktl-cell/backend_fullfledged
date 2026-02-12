@@ -18,7 +18,7 @@ export const userotpsend = async(email,name,otp) => {
             from: `"${process.env.COMPANY_NAME || 'Zupee'}" <${process.env.NODEMAILER_USER}>`,
             to: email,
             subject: `Your OTP for Secure Login - ${process.env.COMPANY_NAME || 'Zupee'}`,
-            text: `Hi ${name},\n\nYour OTP for login is: ${otp}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\n${process.env.COMPANY_NAME || 'Bike Company'} Team`,
+            text: `Hi ${name},\n\nYour OTP for login is: ${otp}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\n${process.env.COMPANY_NAME || 'Zupee'} Team`,
             html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -211,7 +211,7 @@ export const userotpsend = async(email,name,otp) => {
     <div class="container">
         <div class="header">
             <div class="bike-icon">🚴‍♂️</div>
-            <h1>Bike Company</h1>
+            <h1>Zupee</h1>
             <p>Ride Safe, Ride Secure</p>
         </div>
         
@@ -248,16 +248,16 @@ export const userotpsend = async(email,name,otp) => {
             
             <p style="margin-top: 25px;">
                 Happy Riding!<br>
-                <strong>The Bike Company Team</strong>
+                <strong>Zupee Team</strong>
             </p>
         </div>
         
         <div class="footer">
-            <div class="company-name">${process.env.COMPANY_NAME || 'Bike Company'}</div>
+            <div class="company-name">${process.env.COMPANY_NAME || 'Zupee'}</div>
             <p>Your trusted partner for all biking adventures</p>
             <div class="contact-info">
                 <p>Need help? Contact our support team at ${process.env.SUPPORT_EMAIL || 'support@bikecompany.com'}</p>
-                <p>© ${new Date().getFullYear()} ${process.env.COMPANY_NAME || 'Bike Company'}. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} ${process.env.COMPANY_NAME || 'Zupee'}. All rights reserved.</p>
             </div>
         </div>
     </div>
@@ -266,7 +266,7 @@ export const userotpsend = async(email,name,otp) => {
             `,
         });
 
-        console.log("OTP email sent to:", email, "Message ID:", info.messageId);
+        console.log("OTP email sent to:", email);
         return { success: true, messageId: info.messageId };
     }
     catch (err) {console.error("Error sending OTP email:", err.message); }

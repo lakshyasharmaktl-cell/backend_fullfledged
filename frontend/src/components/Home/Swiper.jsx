@@ -1,299 +1,211 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from 'swiper/modules';
-import { ChevronLeft, ChevronRight, Play, Pause, ExternalLink } from 'lucide-react';
+import { Navigation, Pagination, Autoplay, EffectFade, Thumbs, Parallax } from 'swiper/modules';
+import { ChevronLeft, ChevronRight, Play, Pause, ShoppingBag, ArrowRight, Star, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import 'swiper/css/thumbs';
 
 const WHISKY_DATA = [
   {
     id: 1,
-    name: "JAMESON BOLD",
-    subtitle: "ESTD 1780 • IRISH WHISKEY",
-    desc: "Triple distilled, twice as smooth, one of a kind. A bold expression of Irish craftsmanship with notes of vanilla, toasted wood, and spicy character.",
+    name: "Jameson",
+    suffix: "Bold",
+    subtitle: "Triple Distilled Irish Heritage",
+    desc: "A powerful expression of pot still richness. Matured in heavily charred bourbon barrels to reveal notes of toasted wood, intense spices, and exotic fruits.",
     img: "https://assets.architecturaldigest.in/photos/6041dbd94cfb7d2fe3ff6b54/16:9/w_2560%2Cc_limit/Whisky-whiskey-scotch-burbon-alcohol.jpg",
-    age: "12 Years",
-    region: "Ireland",
-    color: "#D4A76A",
-    type: "Blended"
+    specs: { age: "12Y", abv: "46%", profile: "Spicy" },
+    accent: "#D4A76A"
   },
   {
     id: 2,
-    name: "GLENFIDDICH 18",
-    subtitle: "SINGLE MALT SCOTCH",
-    desc: "Matured in Oloroso sherry and bourbon casks for 18 years. Complex with notes of orchard fruit, baked apple, and rich oak.",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeu4I0Wt2wTOaNLgXwtUZh-WZQR3EASWuzMQ&s",
-    age: "18 Years",
-    region: "Speyside, Scotland",
-    rating: 4.9,
-    color: "#B8860B",
-    type: "Single Malt"
+    name: "Glenfiddich",
+    suffix: "18",
+    subtitle: "Small Batch Reserve Scotch",
+    desc: "Every batch is individually numbered. A truly exceptional single malt, the result of eighteen years of care and attention from our Malt Master.",
+    img: "https://images.unsplash.com/photo-1527281473232-9c47ce5b1ad5?auto=format&fit=crop&q=80&w=1600",
+    specs: { age: "18Y", abv: "40%", profile: "Oak" },
+    accent: "#B8860B"
   },
   {
     id: 3,
-    name: "MACALLAN 12",
-    subtitle: "DOUBLE CASK • SHERRY OAK",
-    desc: "Rich honey, citrus, and gentle spice finish. Matured in American and European oak sherry seasoned casks for 12 years.",
-    img: "https://images.unsplash.com/photo-1584225064536-d0fbc0a10c1c?auto=format&fit=crop&q=80&w=1600",
-    age: "12 Years",
-    region: "Speyside, Scotland",
-    rating: 4.7,
-    color: "#8B4513",
-    type: "Single Malt"
-  },
-  {
-    id: 4,
-    name: "JOHNNIE WALKER BLUE",
-    subtitle: "BLENDED SCOTCH WHISKY",
-    desc: "An exquisite blend of Scotland's rarest whiskies. Velvety smooth with deep, rich flavors and a long, smoky finish.",
+    name: "Johnnie",
+    suffix: "Blue",
+    subtitle: "The Masterpiece of Blending",
+    desc: "Only one in every ten thousand casks has the elusive quality, character and flavor to deliver the remarkable signature taste.",
     img: "https://images.unsplash.com/photo-1531214159280-079b95d26139?auto=format&fit=crop&q=80&w=1600",
-    age: "NAS",
-    region: "Scotland",
-    rating: 5.0,
-    color: "#1E3A8A",
-    type: "Blended"
-  },
-  {
-    id: 5,
-    name: "YAMAZAKI 12",
-    subtitle: "JAPANESE SINGLE MALT",
-    desc: "Japan's premier single malt whisky. Notes of peach, pineapple, grapefruit, clove, and Japanese oak with a long spicy finish.",
-    img: "https://images.unsplash.com/photo-1549231482-5cf39d19fba4?auto=format&fit=crop&q=80&w=1600",
-    age: "12 Years",
-    region: "Osaka, Japan",
-    rating: 4.9,
-    color: "#D2691E",
-    type: "Single Malt"
-  },
-  {
-    id: 6,
-    name: "WOODFORD RESERVE",
-    subtitle: "KENTUCKY STRAIGHT BOURBON",
-    desc: "A premium small batch Kentucky Straight Bourbon Whiskey. Rich, bold and spicy with a long, smooth finish.",
-    img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&q=80&w=1600",
-    age: "NAS",
-    region: "Kentucky, USA",
-    rating: 4.6,
-    color: "#8B7355",
-    type: "Bourbon"
-  },
-  {
-    id: 7,
-    name: "LAGAVULIN 16",
-    subtitle: "ISLAY SINGLE MALT",
-    desc: "Intensely flavored, smoky, with sea-spray and a dry finish. A classic Islay malt from the south shore of the island.",
-    img: "https://c4.wallpaperflare.com/wallpaper/779/838/425/glass-drink-alcohol-ice-cubes-wallpaper-preview.jpg",
-    age: "16 Years",
-    region: "Islay, Scotland",
-    rating: 4.8,
-    color: "#5D4037",
-    type: "Single Malt"
-  },
-  {
-    id: 8,
-    name: "REDBREAST 15",
-    subtitle: "IRISH SINGLE POT STILL",
-    desc: "A rich, full-bodied whiskey with a wonderfully complex spicy and fruity character. Matured in bourbon and sherry casks.",
-    img: "https://c4.wallpaperflare.com/wallpaper/612/422/330/drink-jack-daniels-whiskey-wallpaper-preview.jpg",
-    age: "15 Years",
-    region: "Ireland",
-    rating: 4.9,
-    color: "#A0522D",
-    type: "Single Pot Still"
-  },
-  {
-    id: 9,
-    name: "HIBIKI HARMONY",
-    subtitle: "JAPANESE BLENDED WHISKY",
-    desc: "A harmonious blend of malt and grain whiskies from Yamazaki, Hakushu, and Chita distilleries.",
-    img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&q=80&w=1600",
-    age: "NAS",
-    region: "Japan",
-    rating: 4.7,
-    color: "#FFD700",
-    type: "Blended"
-  },
-  {
-    id: 10,
-    name: "BUFFALO TRACE",
-    subtitle: "KENTUCKY STRAIGHT BOURBON",
-    desc: "An award-winning bourbon with complex aroma of vanilla, mint, and molasses. Smooth with notes of brown sugar and spice.",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUCSO2CpIl9TUQvhwqLaHHO7sm6Mk1sceFow&s",
-    age: "NAS",
-    region: "Kentucky, USA",
-    rating: 4.5,
-    color: "#CD853F",
-    type: "Bourbon"
+    specs: { age: "Rare", abv: "40%", profile: "Smoke" },
+    accent: "#1E3A8A"
   }
 ];
 
-export default function BigWhiskySwiper() {
+export default function LuxuryHero() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const [autoplayRunning, setAutoplayRunning] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleAutoplayToggle = () => {
-    setAutoplayRunning(!autoplayRunning);
-  };
-
-  const ratingStars = (rating) => {
-    return (
-      <div className="flex items-center gap-1 mt-6">
-        {[...Array(5)].map((_, i) => (
-          <span 
-            key={i} 
-            className={`text-xl ${i < Math.floor(rating) ? 'text-amber-400' : 'text-blue-300/30'}`}
-          >
-            ★
-          </span>
-        ))}
-        <span className="ml-2 text-blue-200">{rating.toFixed(1)}</span>
-      </div>
-    );
-  };
-
   return (
-    <div className="relative w-full h-screen max-h-[100vh] bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950 overflow-hidden">
-      {/* Main Swiper */}
+    <div className="relative w-full h-screen bg-[#020617] overflow-hidden text-white font-sans">
+      
+      {/* BACKGROUND AMBIENCE */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-600/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full" />
+      </div>
+
       <Swiper
-        modules={[Navigation, Pagination, Autoplay, EffectFade, Thumbs]}
+        modules={[Navigation, Pagination, Autoplay, EffectFade, Thumbs, Parallax]}
         effect="fade"
+        parallax={true}
         loop={true}
-        navigation={{
-          nextEl: '.custom-next',
-          prevEl: '.custom-prev',
-        }}
-        pagination={{
-          clickable: true,
-          renderBullet: (index, className) => {
-            return `<span class="${className} !w-3 !h-3 !bg-transparent !border-2 !border-amber-400 !mx-2 !opacity-50 hover:!opacity-100 transition-opacity"></span>`;
-          },
-        }}
-        autoplay={autoplayRunning ? { delay: 5000, disableOnInteraction: false } : false}
-        thumbs={{ swiper: thumbsSwiper }}
-        className="h-full w-full"
+        speed={1200}
+        autoplay={{ delay: 7000 }}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-        style={{
-          '--swiper-navigation-color': '#fbbf24',
-          '--swiper-pagination-color': '#fbbf24',
-          '--swiper-pagination-bullet-inactive-color': 'rgba(251, 191, 36, 0.3)',
-          '--swiper-pagination-bullet-inactive-opacity': '0.5',
-        }}
+        className="h-full w-full z-10"
       >
-        {WHISKY_DATA.map((item) => (
+        {WHISKY_DATA.map((item, index) => (
           <SwiperSlide key={item.id}>
-            <div 
-              className="relative h-full w-full flex items-center px-4 md:px-8 lg:px-16 xl:px-24 bg-cover bg-center"
-              style={{
-                backgroundImage: `linear-gradient(105deg, rgba(11,28,45,0.95) 35%, transparent 70%), url(${item.img})`
-              }}
-            >
-              {/* Content Box */}
-              <div className="max-w-2xl z-10 animate-fadeIn ml-4 md:ml-8 lg:ml-16">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="px-4 py-1.5 bg-gradient-to-r from-blue-800/30 to-blue-900/30 backdrop-blur-sm rounded-full border border-blue-700/50 text-amber-300 tracking-[2px] text-xs font-bold uppercase">
-                    {item.subtitle}
-                  </span>
-                  <span className="px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-amber-600/20 backdrop-blur-sm rounded-full border border-amber-500/30 text-amber-300 text-xs font-medium">
-                    {item.type}
-                  </span>
-                </div>
-
-                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif text-white leading-[1.1] mb-4">
-                  {item.name.split(' ').map((word, i) => (
-                    <span key={i} className="block">
-                      {word}
-                    </span>
-                  ))}
-                </h1>
-
-                <div className="flex items-center gap-6 mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-amber-300 font-medium">{item.age}</span>
-                  </div>
-                  <div className="text-blue-200">{item.region}</div>
-                </div>
-
-               
-
-                
-
+            <div className="relative h-full w-full grid grid-cols-12 items-center px-6 lg:px-20">
+              
+              {/* IMAGE SECTION with Masking */}
+              <div className="absolute inset-0 z-0">
+                <motion.div 
+                  initial={{ scale: 1.15, opacity: 0 }}
+                  animate={{ scale: activeIndex === index ? 1 : 1.15, opacity: 0.6 }}
+                  transition={{ duration: 1.5 }}
+                  className="h-full w-full bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.img})` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/90 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/50 via-transparent to-[#020617]" />
               </div>
 
-           
+              {/* TEXT CONTENT */}
+              <div className="col-span-12 lg:col-span-7 z-20">
+                <AnimatePresence mode="wait">
+                  {activeIndex === index && (
+                    <motion.div>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-3 mb-4"
+                      >
+                        <Award className="w-5 h-5 text-amber-500" />
+                        <span className="text-amber-500 uppercase tracking-[0.5em] text-[10px] font-black">
+                          {item.subtitle}
+                        </span>
+                      </motion.div>
+
+                      <motion.h1 
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2, duration: 0.8 }}
+                        className="text-7xl md:text-9xl font-black uppercase tracking-tighter leading-none mb-2"
+                      >
+                        {item.name} <br />
+                        <span className="text-transparent stroke-white" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.4)' }}>
+                          {item.suffix}
+                        </span>
+                      </motion.h1>
+
+                      <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.7 }}
+                        transition={{ delay: 0.4 }}
+                        className="max-w-lg text-lg text-slate-300 font-light leading-relaxed mb-10"
+                      >
+                        {item.desc}
+                      </motion.p>
+
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.6 }}
+                        className="flex items-center gap-6"
+                      >
+                        <button className="relative overflow-hidden px-10 py-5 bg-white text-black group transition-all">
+                          <span className="relative z-10 flex items-center gap-3 font-bold text-xs uppercase tracking-widest">
+                            Acquire Bottle <ShoppingBag className="w-4 h-4" />
+                          </span>
+                          <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                        </button>
+                        
+                        <button className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-bold group">
+                          Tasting Notes <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                        </button>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* SPECIFICATION SIDEBAR (Floating Glass Card) */}
+              <div className="hidden lg:flex col-span-5 justify-end z-20">
+                <motion.div 
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: activeIndex === index ? 1 : 0, x: activeIndex === index ? 0 : 100 }}
+                  transition={{ delay: 0.5, duration: 1 }}
+                  className="bg-white/5 backdrop-blur-2xl border border-white/10 p-10 rounded-3xl w-72 space-y-8"
+                >
+                  {Object.entries(item.specs).map(([key, value]) => (
+                    <div key={key}>
+                      <p className="text-amber-500 uppercase text-[9px] font-bold tracking-widest mb-1 opacity-60">{key}</p>
+                      <p className="text-3xl font-light tracking-tight">{value}</p>
+                    </div>
+                  ))}
+                  <div className="pt-4 border-t border-white/10">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-amber-500 text-amber-500" />)}
+                    </div>
+                    <p className="text-[10px] mt-2 opacity-40 uppercase tracking-widest">Master Distiller Approved</p>
+                  </div>
+                </motion.div>
+              </div>
+
             </div>
           </SwiperSlide>
         ))}
-
-        {/* Custom Navigation */}
-        <div className="custom-prev absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-gradient-to-r from-blue-900/80 to-blue-800/80 backdrop-blur-sm rounded-full border border-blue-700/50 flex items-center justify-center cursor-pointer transition-all hover:scale-110 hover:border-amber-400/50">
-          <ChevronLeft className="w-6 h-6 text-amber-300" />
-        </div>
-        <div className="custom-next absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-gradient-to-r from-blue-900/80 to-blue-800/80 backdrop-blur-sm rounded-full border border-blue-700/50 flex items-center justify-center cursor-pointer transition-all hover:scale-110 hover:border-amber-400/50">
-          <ChevronRight className="w-6 h-6 text-amber-300" />
-        </div>
-
-        {/* Autoplay Toggle */}
-        <button
-          onClick={handleAutoplayToggle}
-          className="absolute right-4 md:right-8 top-8 z-20 w-12 h-12 bg-gradient-to-r from-blue-900/80 to-blue-800/80 backdrop-blur-sm rounded-full border border-blue-700/50 flex items-center justify-center cursor-pointer transition-all hover:scale-110 hover:border-amber-400/50"
-        >
-          {autoplayRunning ? (
-            <Pause className="w-5 h-5 text-amber-300" />
-          ) : (
-            <Play className="w-5 h-5 text-amber-300" />
-          )}
-        </button>
       </Swiper>
 
-      
+      {/* NAVIGATION OVERLAY */}
+      <div className="absolute bottom-10 left-6 lg:left-20 z-30 flex items-end justify-between w-[calc(100%-120px)]">
+        
+        {/* PROGRESS INDICATOR */}
+        <div className="flex items-center gap-4">
+          <span className="text-6xl font-black text-white/10">0{activeIndex + 1}</span>
+          <div className="h-[2px] w-24 bg-white/10 relative overflow-hidden">
+            <motion.div 
+              key={activeIndex}
+              initial={{ x: '-100%' }}
+              animate={{ x: '0%' }}
+              transition={{ duration: 7, ease: "linear" }}
+              className="absolute inset-0 bg-amber-500"
+            />
+          </div>
+          <span className="text-xs font-bold opacity-40 tracking-widest">0{WHISKY_DATA.length}</span>
+        </div>
 
-
-      {/* Progress Indicator */}
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden md:block">
-        <div className="text-sm text-blue-300">
-          <span className="text-amber-400 font-bold">{activeIndex + 1}</span>
-          <span className="mx-2 text-blue-400">/</span>
-          <span>{WHISKY_DATA.length}</span>
+        {/* SWIPER ARROWS */}
+        <div className="flex gap-4">
+          <button className="custom-prev-luxury group w-16 h-16 border border-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all active:scale-90">
+            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          </button>
+          <button className="custom-next-luxury group w-16 h-16 border border-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all active:scale-90">
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       </div>
 
-      {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-950/30 via-transparent to-blue-950/10 pointer-events-none" />
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+      <style jsx global>{`
+        .stroke-white {
+          -webkit-text-fill-color: transparent;
+          -webkit-text-stroke: 1px rgba(255,255,255,0.4);
         }
-        .animate-fadeIn {
-          animation: fadeIn 0.8s ease-out forwards;
-        }
-        
-        .swiper-pagination-bullet {
-          background: transparent;
-          border: 2px solid var(--swiper-pagination-color, #fbbf24);
-          opacity: 0.5;
-          width: 12px;
-          height: 12px;
-          margin: 0 8px !important;
-        }
-        
-        .swiper-pagination-bullet-active {
-          opacity: 1;
-          background: var(--swiper-pagination-color, #fbbf24);
+        .swiper-effect-fade .swiper-slide {
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
       `}</style>
     </div>

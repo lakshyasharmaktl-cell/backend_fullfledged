@@ -15,7 +15,7 @@ const PORT = 1234
  
 app.use(cors())
 app.use(express.json())
-const MONGODB_URI = "mongodb+srv://bansalkunal2510_db_user:tj4juCPE9q32HO1z@cluster0.vfwkj91.mongodb.net/"
+const MONGODB_URI = "mongodb+srv://lakshaya:laxxxy19@cluster0.9ftkstu.mongodb.net/"
 
 mongoose.connect(MONGODB_URI)
     .then(() => console.log('MongoDB connected ...'))

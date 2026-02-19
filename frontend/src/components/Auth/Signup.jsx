@@ -64,7 +64,6 @@ export default function Signup() {
           />
         </div>
 
-        {/* FORM */}
         <div className="w-full lg:w-1/2 p-8 md:p-12">
           <h2 className="text-3xl font-bold text-white mb-6">
             Create Account
@@ -72,7 +71,6 @@ export default function Signup() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
 
-            {/* NAME */}
             <div>
               <label className="block text-xs text-amber-500 mb-1 uppercase">
                 Full Name

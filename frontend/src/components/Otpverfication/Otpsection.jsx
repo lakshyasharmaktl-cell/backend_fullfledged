@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation,useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import { ArrowLeft, Mail, Clock, RefreshCw} from "lucide-react";
 export default function Otpsection() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const {id} = useParams()
 
   const email = location.state?.email;
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -19,7 +21,7 @@ export default function Otpsection() {
 
   useEffect(() => {
     let interval;
-    if (isTimerActive && timer > 0) {
+    if (isTimerActive && timer > 0) { 
       interval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
@@ -92,33 +94,31 @@ export default function Otpsection() {
     const finalOtp = otpValue || otp.join("");
 
     if (finalOtp.length !== 4) {
-      toast.warning("Please enter complete 6-digit OTP");
+      toast.warning("Please enter complete 4-digit OTP");
       return;
     }
 
-    if (!email) {
-      toast.error("Email missing. Please sign up again.");
-      navigate("/signup");
-      return;
-    }
+   
 
     try {
       setLoading(true);
       
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const res = await axios.post("http://localhost:1234/verify_otp/:id", {
+      const res = await axios.post(`http://localhost:1234/verify_otp/${id}`, {
         email,
         otp: finalOtp,
       });
 
-      toast.success(res.data?.msg || "Account verified successfully!");
+      if(res.status==200){
+        toast.success(res.data?.msg || "Account verified successfully!");
+        navigate("/user-login");
+      }
       
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
+     
 
     } catch (err) {
+      
       toast.error(err.response?.data?.msg || "Invalid OTP. Please try again.");
       
       inputRefs.current.forEach(input => {
@@ -141,6 +141,7 @@ export default function Otpsection() {
       setResending(true);
       
       await axios.post("http://localhost:1234/verify_otp:id", { email });
+      
       
       toast.success("New OTP sent to your email!");
       setTimer(60);

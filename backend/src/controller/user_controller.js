@@ -50,35 +50,35 @@ export const verify_otp = async (req, res) => {
 
         const { id } = req.params;
         const { otp } = req.body;
-
+        
         if (!otp) {
-            return res.status(400).json({ status: false, message: "Pls provide otp" })
+            return res.status(400).json({ status: false, msg: "Pls provide otp" })
         }
 
         const user = await user_models.findById(id);
         if (!user) {
-            return res.status(404).json({ status: false, mmessage: "user not found" })
+            return res.status(404).json({ status: false, mmsg: "user not found" })
         }
 
         const { userotp, otpExpire, isverify } = user?.user;
 
         if (isverify) {
-            return res.status(409).json({ status: false, message: "Accont is already verified . pls login..." })
+            return res.status(409).json({ status: false, msg: "Accont is already verified . pls login..." })
         }
 
         if (Date.now() > otpExpire) {
-            return res.status(410).json({ status: false, message: "Otp has a expired . Pls req a new otp.." })
+            return res.status(410).json({ status: false, msg: "Otp has a expired . Pls req a new otp.." })
         }
 
         if (String(otp) != String(userotp)) {
-            return res.status(401).json({ status: false, message: "Invalid OTP" })
+            return res.status(401).json({ status: false, msg: "Invalid OTP" })
         }
 
         await user_models.findOneAndUpdate({ _id: id },
             { $set: { 'user.isVerify': true, 'user.userOtp': null, 'user.otpExpire': null } },
         )
 
-        return res.status(200).json({ status: true, message: "Account verified successfully. pls login." });
+        return res.status(200).json({ status: true, msg: "Account verified successfully. pls login." });
 
     }
     catch (err) {
@@ -103,7 +103,7 @@ export const user_login = async (req, res) => {
         
         if (!comparepass) return res.status(400).send({ status: false, msg: "wrong password" })
 
-        const token = await jwt.sign({ id: checkuser._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE })
+        const token = await jwt.sign({ id: checkuser._id }, process.env.JWT_token, { expiresIn: process.env.Expire_id })
         const DB = {
             name: checkuser.name,
             email: checkuser.email,

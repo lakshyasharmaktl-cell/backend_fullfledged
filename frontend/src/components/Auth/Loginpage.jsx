@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaGlassWhiskey, FaLock, FaEnvelope } from "react-icons/fa";
+import { toast } from "react-toastify";
+
 
 export default function Loginpage() {
   const navigate = useNavigate();
@@ -14,11 +16,42 @@ export default function Loginpage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    navigate("/");
+
+    try {
+      const response = await fetch("http://localhost:1234/user_login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // 1. Success Notification
+        toast.success("Login Successful!");
+        
+        // 2. Save token if your API returns one (uncomment if needed)
+        // localStorage.setItem("token", data.token);
+
+        // 3. Navigate to home
+        navigate("/");
+      } else {
+        // Handle server-side errors (e.g., wrong password)
+        toast.error(data.message || "Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      // Handle network errors
+      console.error("Login Error:", error);
+      toast.error("Server is unreachable. Please try again later.");
+    }
   };
+
+  
+   
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050a15] px-4 font-sans mt-9">

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Signup() {
 
   const navigate = useNavigate();
-  const [open,setOpen] =useState(false)
+  const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -44,7 +44,7 @@ export default function Signup() {
       );
 
       toast.success(response?.data?.msg || "OTP sent to your email ");
-      
+
       navigate(`/otp/${response?.data?.id}`);
 
     } catch (err) {
@@ -52,13 +52,13 @@ export default function Signup() {
     }
   };
 
-const googleLogInAPi = () => {
-  try {
-    window.location.href = "http://localhost:1234/auth/google";
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const googleLogInAPi = () => {
+    try {
+      window.location.href = "http://localhost:1234/auth/google";
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050a15] px-4 py-12">
@@ -188,13 +188,25 @@ const googleLogInAPi = () => {
             >
               Sign Up
             </button>
-            <div
-              onClick={googleLogInAPi}
-              className="w-full py-3 mt-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl"
-            >
-              Sign Up
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={googleLogInAPi}
+                className="flex items-center justify-center gap-3 
+               bg-white text-gray-700 font-semibold 
+               px-6 py-3 rounded-xl 
+               shadow-md hover:shadow-lg 
+               hover:scale-105 
+               transition-all duration-300 
+               border border-gray-300"
+              >
+                <img
+                  className="h-6 w-6"
+                  src="https://static.vecteezy.com/system/resources/previews/042/165/816/non_2x/google-logo-transparent-free-png.png"
+                  alt="Google Logo"
+                />
+                <span>Continue with Google</span>
+              </button>
             </div>
-
           </form>
         </div>
       </div>

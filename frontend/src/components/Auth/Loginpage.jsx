@@ -31,20 +31,19 @@ export default function Loginpage() {
       const data = await response.json();
 
       if (response.ok) {
-        // 1. Success Notification
+     
         toast.success("Login Successful!");
         
-        // 2. Save token if your API returns one (uncomment if needed)
-        // localStorage.setItem("token", data.token);
+       
 
-        // 3. Navigate to home
+       
         navigate("/");
       } else {
-        // Handle server-side errors (e.g., wrong password)
+        
         toast.error(data.message || "Login failed. Please check your credentials.");
       }
     } catch (error) {
-      // Handle network errors
+      
       console.error("Login Error:", error);
       toast.error("Server is unreachable. Please try again later.");
     }
@@ -55,10 +54,8 @@ export default function Loginpage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050a15] px-4 font-sans mt-9">
-      {/* Main Container */}
       <div className="flex w-full max-w-5xl bg-[#0a1128] rounded-3xl shadow-2xl overflow-hidden border border-white/10">
 
-        {/* Left Side: Whisky GIF/Image */}
         <div className="hidden lg:flex lg:w-1/2 relative h-100 mt-20">
           <img
             src="https://res.cloudinary.com/dzskwfinc/image/upload/v1770129324/f06f9f04bb74b8c8b9fe6842dfabab07_qmh82b.gif"
@@ -66,7 +63,6 @@ export default function Loginpage() {
             className="absolute inset-0 w-full h-full object-cover grayscale-[20%] brightness-50" />
         </div>
 
-        {/* Right Side: Login Form */}
         <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
           <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
@@ -74,7 +70,6 @@ export default function Loginpage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div className="relative group">
               <label className="block text-sm font-medium text-amber-500/80 mb-2 ml-1">
                 Email Address
@@ -95,7 +90,6 @@ export default function Loginpage() {
               </div>
             </div>
 
-            {/* Password */}
             <div className="relative group">
               <label className="block text-sm font-medium text-amber-500/80 mb-2 ml-1">
                 Password
@@ -107,7 +101,7 @@ export default function Loginpage() {
                 <input
                   type="password"
                   name="password"
-                  placeholder="••••••••"
+                  placeholder="Enter Password..."
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -116,7 +110,6 @@ export default function Loginpage() {
               </div>
             </div>
 
-            {/* Remember & Forgot */}
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center text-gray-400 cursor-pointer">
                 <input type="checkbox" className="mr-2 accent-amber-600" /> Remember me
@@ -126,7 +119,6 @@ export default function Loginpage() {
               </button>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-amber-900/20 active:scale-[0.98]"
@@ -135,7 +127,6 @@ export default function Loginpage() {
             </button>
           </form>
 
-          {/* Sign Up Link */}
 
         </div>
 

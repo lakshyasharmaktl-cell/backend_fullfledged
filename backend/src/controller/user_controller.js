@@ -50,7 +50,7 @@ export const verify_otp = async (req, res) => {
 
         const { id } = req.params;
         const { otp } = req.body;
-        
+
         if (!otp) {
             return res.status(400).json({ status: false, msg: "Pls provide otp" })
         }
@@ -100,7 +100,7 @@ export const user_login = async (req, res) => {
         if (!(checkuser.user.isVerify)) return res.status(400).send({ status: false, msg: "Account not Verify pls Verify Otp" })
 
         const comparepass = await bcrypt.compare(password, checkuser.password)
-        
+
         if (!comparepass) return res.status(400).send({ status: false, msg: "wrong password" })
 
         const token = await jwt.sign({ id: checkuser._id }, process.env.JWT_token, { expiresIn: process.env.Expire_id })
@@ -117,3 +117,18 @@ export const user_login = async (req, res) => {
         return error(err, res);
     }
 };
+
+export const user_login_with_google = async (req, res) => {
+    try {
+        const user = req.user;
+
+        if (!user) {
+            return res.status(400).json({ message: "Google authentication failed" });
+        }
+
+        return res.redirect("http://localhost:5173");
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+} 

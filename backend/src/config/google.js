@@ -1,28 +1,30 @@
-// import passport from 'passport'
-// import { Stra6tegy as googleStrategy, profile } from "passport-google-oauth20";
-// import dotenv from 'dotenv'
-// dotenv.config()
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import dotenv from "dotenv";
 
-// passport.use(
-//     new GoogleStrategy(
-//         {
-//             clientID: process.env.Client_Id!,
-//             clientSecret: process.env.Client_secret!,
-//             callbackURL: "/auth/google/callback",
+dotenv.config();
 
-//         },
-//         async(_accessToken : String, _refreshToken : string , profile, done) => {
-//             try{
-//                 if(!profile) return done(null,false);
-//                 done(null, profile);
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        console.log(profile)
+        if (!profile) return done(null, false);
 
-//             }
-//             catch(err){done(err as Error, false);}
+        return done(null, profile);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
+);
 
-//         }
-//     )
-// );
-// passport.serialization((user : any , done) => done(null,user.id));
-// passport.deserialization((user : any , done) => done(null,user));
+passport.serializeUser((user, done) => {done(null, user.id);});
+passport.deserializeUser((id, done) => {done(null, id);});
 
-// export default passport;
+export default passport;

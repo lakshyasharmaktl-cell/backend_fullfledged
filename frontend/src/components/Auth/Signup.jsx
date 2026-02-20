@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Signup() {
 
   const navigate = useNavigate();
-
+  const [open,setOpen] =useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,6 +51,14 @@ export default function Signup() {
       toast.error(err.response?.data?.msg || "Server error. Try again.");
     }
   };
+
+const googleLogInAPi = () => {
+  try {
+    window.location.href = "http://localhost:1234/auth/google";
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050a15] px-4 py-12">
@@ -180,6 +188,12 @@ export default function Signup() {
             >
               Sign Up
             </button>
+            <div
+              onClick={googleLogInAPi}
+              className="w-full py-3 mt-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl"
+            >
+              Sign Up
+            </div>
 
           </form>
         </div>

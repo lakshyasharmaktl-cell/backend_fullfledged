@@ -190,6 +190,7 @@ export default function Signup() {
             </button>
             <div className="mt-6 flex justify-center">
               <button
+              type="button"
                 onClick={googleLogInAPi}
                 className="flex items-center justify-center gap-3 
                bg-white text-gray-700 font-semibold 

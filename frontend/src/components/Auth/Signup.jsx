@@ -39,7 +39,7 @@ export default function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:1234/laxxy",
+        "http://localhost:1234/create_user",
         formData
       );
 

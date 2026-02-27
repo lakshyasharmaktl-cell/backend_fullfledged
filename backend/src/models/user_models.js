@@ -1,17 +1,24 @@
 import mongoose from 'mongoose'
-import {validname,validEmail,validpassword } from '../validation/validation.js'
+import { validname, validEmail, validpassword } from '../validation/validation.js'
 import bcrypt from 'bcrypt'
 
-const userSchema = new mongoose.Schema({
+export const userSchema = new mongoose.Schema({
     name: {
         type: String, trim: true, required: [true, 'Name is required'], validate: [validname, 'Invalid name']
     },
     email: {
         type: String, trim: true, required: [true, 'email is required'], lowercase: true, validate: [validEmail, 'Invalid email']
     },
+    gender: {
+        type: String, enum: ['male', 'female', 'other'], trim: true, required: true
+    },
+    role: {
+        type: String, enum: ['user', 'admin'], trim: true, required: true
+    },
+
     password: {
         type: String, trim: true, required: [true, 'password is required'],
-         validate: [validpassword, 'Invalid password . Please give one lowercase and one uppercase letter with one special character and one number']
+        validate: [validpassword, 'Invalid password . Please give one lowercase and one uppercase letter with one special character and one number']
 
     },
 

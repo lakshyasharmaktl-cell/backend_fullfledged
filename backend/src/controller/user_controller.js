@@ -29,7 +29,7 @@ export const create_user = async (req, res) => {
                 return res.status(200).send({ status: true, msg: "resend otp pls...", id: checkuser._id, name: checkuser.name, email: checkuser.email })
             }
         }
-
+        data.role="user"
         data.user = { otpExpire: expiryTime, userotp: randomotp }
 
         const DB = await user_models.create(data)
@@ -94,7 +94,7 @@ export const user_login = async (req, res) => {
         if (!email) return res.status(400).send({ status: false, msg: "Email is required..." })
         if (!password) return res.status(400).send({ status: false, msg: "password is required..." })
 
-        const checkuser = await user_models.findOne({ email: email, 'user.isDelete': false })
+        const checkuser = await user_models.findOne({ email: email, 'user.isDelete': false, role: "user" })
         if (!checkuser) return res.status(404).send({ status: false, msg: "user not found . pls sign up your account" })
 
         if (!(checkuser.user.isVerify)) return res.status(400).send({ status: false, msg: "Account not Verify pls Verify Otp" })
@@ -108,6 +108,7 @@ export const user_login = async (req, res) => {
             name: checkuser.name,
             email: checkuser.email,
             id: checkuser._id,
+
         }
 
         res.status(200).send({ status: true, msg: "login successfully", token, DB })

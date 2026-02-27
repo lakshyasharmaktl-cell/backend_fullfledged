@@ -1,5 +1,6 @@
 export const error = (err,res) => {
-
+    
+      if (err.name == 'JsonWebTokenError') return res.status(400).send({ status: false, msg: 'Invalid Token' })
     if(err.name === "ValidationError") return res.status(400).send({status:false,msg:err.message})
     if(err.name === "CasteError") return res.status(400).send({status:false,msg:'Invalid mongoose Id'})
     if(err.code == 11000) {

@@ -15,9 +15,9 @@ const PORT = 1234
  
 app.use(cors())
 app.use(express.json())
-const MONGODB_URI = "mongodb+srv://lakshaya:laxxxy19@cluster0.9ftkstu.mongodb.net/"
 
-mongoose.connect(MONGODB_URI)
+
+mongoose.connect(process.env.MongoDBUrl)
     .then(() => console.log('MongoDB connected ...'))
     .catch((err) => console.log('MongoDB error =>', err.message))
 

@@ -4,6 +4,7 @@ import { error } from '../error/errorhandling.js'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { validname } from '../validation/validation.js'
 
 dotenv.config()
 
@@ -13,6 +14,7 @@ export const create_user = async (req, res) => {
         const { email } = data
 
         const randomotp = Math.floor(1000 + Math.random() * 9000)
+
         const expiryTime = Date.now() + 5 * 60 * 1000;
 
         const checkuser = await user_models.findOneAndUpdate({ email: email },
@@ -24,12 +26,13 @@ export const create_user = async (req, res) => {
 
             if (isDelete) return res.status(200).send({ status: true, msg: "Your Account is delete" })
             if (isverify) return res.status(200).send({ status: true, msg: "Account verify . Pls login this account" })
+
             if (!isverify) {
                 userotpsend(checkuser.email, checkuser.name, randomotp)
                 return res.status(200).send({ status: true, msg: "resend otp pls...", id: checkuser._id, name: checkuser.name, email: checkuser.email })
             }
         }
-        data.role="user"
+        data.role = "user"
         data.user = { otpExpire: expiryTime, userotp: randomotp }
 
         const DB = await user_models.create(data)
@@ -132,4 +135,77 @@ export const user_login_with_google = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-} 
+};
+
+export const updated_Profile = async (req, res) => {
+    try {
+
+        const id = req.params.id
+        const name = req.body.name
+
+        let updated = {}
+
+        if (name) {
+            if (!validname(name)) return res.status(400).send({ status: false, msg: 'invalid name ' })
+        }
+
+        const up = await user_models.findByIdAndUpdate(id, updated, { new: true })
+        res.status(200).send({ status: true, msg: "profile Updated Successfully...", up })
+
+    }
+    catch (err) {
+        error(err, res)
+    }
+}
+
+export const delete_Profile = async (req, res) => {
+    try {
+
+        const id = req.params.id
+        const DB = await user_models.findById(id)
+
+        if (!DB) return res.status(404).send({ status: false, msg: "User not found pls signup account" })
+        if (DB.verification.isDelete) return res.status(404).send({ status: false, msg: "Account Already deleted" })
+
+        await user_models.findByIdAndUpdate(
+            { _id: id },
+            {
+                $set: { 'verification.isDelete': true }
+            }
+        )
+
+        res.status(200).send({ status: true, msg: 'Account Deleted Successfully' })
+
+
+
+    }
+    catch (err) {
+        error(err, res)
+
+    }
+}
+
+export const resend_Otp = async (req, res) => {
+    try {
+        const { id } = req.query
+        if (!id) return res.status(400).send({ status: false, msg: "id is required" })
+
+        const DB = await user_model.findById(id)
+        if (!DB) return res.status(404).send({ status: false, msg: "user not found" })
+
+        const randomOtp = Math.floor(Math.random() * 10000)
+        const expirydate = Date.now() + 300000
+        const { isDelete, isVerified } = DB.verification
+
+        if (isDelete) return res.status(400).send({ status: false, msg: "Account Deleted!" })
+        if (isVerified) return res.status(400).send({ status: false, msg: "Account Already Verify Pls LogIn!" })
+
+        await user_model.findOneAndUpdate(
+            { email: DB.email },
+            { $set: { 'verification.optExipre': expirydate, 'verification.userOtp': randomOtp } },
+        )
+        sendUserOtpMail(DB.email, DB.name, randomOtp)
+        res.status(200).send({ status: true, msg: "succesfully Send new Otp" })
+    }
+    catch (e) { errorhandling(e, res) }
+}

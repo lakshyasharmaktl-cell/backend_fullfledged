@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { validname } from '../validation/validation.js'
+import { uploadProfileImg, deleteProfileImg } from '../images/upload.js'
 
 dotenv.config()
 
@@ -147,6 +148,9 @@ export const updated_Profile = async (req, res) => {
 
         if (name) {
             if (!validname(name)) return res.status(400).send({ status: false, msg: 'invalid name ' })
+            updated = {
+                $set: { name: name }
+            }
         }
 
         const up = await user_models.findByIdAndUpdate(id, updated, { new: true })
@@ -190,7 +194,7 @@ export const resend_Otp = async (req, res) => {
         const { id } = req.query
         if (!id) return res.status(400).send({ status: false, msg: "id is required" })
 
-        const DB = await user_model.findById(id)
+        const DB = await user_models.findById(id)
         if (!DB) return res.status(404).send({ status: false, msg: "user not found" })
 
         const randomOtp = Math.floor(Math.random() * 10000)
@@ -200,12 +204,32 @@ export const resend_Otp = async (req, res) => {
         if (isDelete) return res.status(400).send({ status: false, msg: "Account Deleted!" })
         if (isVerified) return res.status(400).send({ status: false, msg: "Account Already Verify Pls LogIn!" })
 
-        await user_model.findOneAndUpdate(
+        await user_models.findOneAndUpdate(
             { email: DB.email },
             { $set: { 'verification.optExipre': expirydate, 'verification.userOtp': randomOtp } },
         )
         sendUserOtpMail(DB.email, DB.name, randomOtp)
         res.status(200).send({ status: true, msg: "succesfully Send new Otp" })
     }
-    catch (e) { errorhandling(e, res) }
+    catch (err) { error(err, res) }
+}
+
+export const change_profile_img = async (req, res) => {
+    try {
+        const file = req.file
+        const id = req.params.id
+
+        const checkUser = await user_models.findById(id)
+
+        if (!checkUser) return res.status(404).send({ status: false, msg: "user not found" })
+
+        if (checkUser?.profileImg?.asset_id) await deleteProfileImg(checkUser?.profileImg?.asset_id)
+
+        const img = await uploadProfileImg(file.path)
+        const DB = await user_models.findByIdAndUpdate(id, { $set: { profileImg: img } }, { new: true })
+
+        res.status(200).send({ status: true, msg: "Profile Image Updated Successfully", DB })
+    }
+    catch (err) { error(err, res) }
+
 }

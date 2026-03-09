@@ -2,7 +2,7 @@ import express from "express";
 import multer from 'multer'
 import passport from '../config/google.js'
 
-import {create_user,verify_otp,user_login,user_login_with_google,resend_Otp,updated_Profile,delete_Profile}
+import {create_user,verify_otp,user_login,user_login_with_google,resend_Otp,updated_Profile,delete_Profile,change_profile_img}
  from '../controller/user_controller.js'
  import {user_authentication,user_authorization} from '../error/user_auth.js'
 
@@ -17,8 +17,9 @@ routes.post('/user_login',user_login)
 routes.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}));
 routes.get("/auth/google/callback",passport.authenticate("google",{session : false}),user_login_with_google);
 routes.get('/resend_Otp',resend_Otp)
-routes.put('/updated_profile/:id',user_authorization,updated_Profile)
+routes.put('/updated_Profile/:id',user_authorization,updated_Profile)
 routes.delete('/delete_profile/:id',user_authorization,delete_Profile)
+routes.put('/change_profile_img/:id',user_authorization,upload.single('profileImg'), change_profile_img)
 
 //Admin
 import { admin_log_in, get_all_user } from '../controller/admin_controller.js'

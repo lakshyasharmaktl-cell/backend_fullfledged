@@ -5,9 +5,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 cloudinary.config({
-    cloud_name: 'dzskwfinc',
-    api_key: '137223823215616',
-    api_secret: 'a_C8FexvcSIIHiI7hpUDEdYFT1Y'
+    cloud_name: process.env.Cloudname,
+    api_key: process.env.APIkey,
+    api_secret: process.env.API_secret
 });
 
 export const uploadProfileImg = async (filePath) => {
@@ -21,3 +21,11 @@ export const uploadProfileImg = async (filePath) => {
         throw err
     }
 }
+
+export const deleteProfileImg = async (AssetsId) => {
+  try {
+    const result = await cloudinary.uploader.destroy(AssetsId);
+    return result
+  } 
+  catch (err) {console.log(err.message);}
+};

@@ -2,7 +2,6 @@ import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import cors from "cors"
-import nodemon from "nodemon"
 import routes from './routes/routes.js'
 
 dotenv.config() 

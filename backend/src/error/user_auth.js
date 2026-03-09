@@ -25,7 +25,7 @@ export const user_authorization = (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_token)
 
-        if (decoded.userId !== id) return res.status(400).send({ status: false, msg: "invalid token" })
+        if (!decoded.userId == id) return res.status(400).send({ status: false, msg: "invalid token" })
 
         next()
     }

@@ -41,7 +41,7 @@ export default function App() {
           <Route path="/contact-us" element={<ContactUs />} />
 
           <Route path="/otp/:id" element={<Otp />} />
-          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/dashBoard" element={<DashBoard />} />
 
 
           <Route path="/the-macallan" element={<Macllan />} />

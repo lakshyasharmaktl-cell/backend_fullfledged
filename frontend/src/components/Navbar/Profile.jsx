@@ -3,13 +3,13 @@ import { CgProfile, CgLogOut } from "react-icons/cg";
 import { SiGmail } from "react-icons/si";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
-
+import {Link} from 'react-router-dom'
 export default function Profile({ dark, setDark }) {
 
     const menuLinks = [
         { name: "Your profile", href: "#", icon: CgProfile },
         { name: "Theme", href: "#", icon: dark ? MdOutlineLightMode : MdOutlineDarkMode, action: () => setDark(!dark) },
-        { name: "Settings", href: "#", icon: FiSettings },
+        { name: "Settings", href: "/dashBoard", icon: FiSettings },
         { name: "Sign out", href: "#", icon: CgLogOut },
     ]
 
@@ -19,7 +19,7 @@ export default function Profile({ dark, setDark }) {
                 <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 hover:ring-2 hover:ring-red-500/50 transition-all">
                     <img
                         alt="Profile"
-                        src="https://res.cloudinary.com/dzskwfinc/image/upload/v1770104642/WhatsApp_Image_2025-12-18_at_6.51.46_AM_rdilvq.jpg"
+                        src="https://res.cloudinary.com/dzskwfinc/image/upload/v1766069669/WhatsApp_Image_2025-12-18_at_8.21.49_PM_madqwt.jpg"
                         className="size-10 rounded-full bg-gray-800 ring-2 ring-red-600/30 hover:ring-red-600/70 transition-all duration-300"
                     />
                 </MenuButton>
@@ -35,7 +35,7 @@ export default function Profile({ dark, setDark }) {
                                 <CgProfile className="text-red-600 dark:text-red-400 text-lg" />
                             </div>
                             <div>
-                                <h1 className="font-semibold text-gray-900 dark:text-white">Lakshya</h1>
+                                <h1 className="font-semibold text-gray-900 dark:text-white">John Doe</h1>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">Premium Member</p>
                             </div>
                         </div>
@@ -44,7 +44,7 @@ export default function Profile({ dark, setDark }) {
                                 <SiGmail className="text-blue-600 dark:text-blue-400 text-lg" />
                             </div>
                             <div>
-                                <h1 className="text-sm text-gray-700 dark:text-gray-300">laxxy@gmail.com</h1>
+                                <h1 className="text-sm text-gray-700 dark:text-gray-300">john.doe@gmail.com</h1>
                             </div>
                         </div>
                     </div>
@@ -65,8 +65,8 @@ export default function Profile({ dark, setDark }) {
                                         <span className="font-medium">{item.name}</span>
                                     </button>
                                 ) : (
-                                    <a
-                                        href={item.href}
+                                    <Link
+                                        to={item.href}
                                         className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${active
                                             ? 'bg-red-50 dark:bg-zinc-800 text-red-600 dark:text-red-400'
                                             : 'text-gray-700 dark:text-gray-300'
@@ -74,7 +74,7 @@ export default function Profile({ dark, setDark }) {
                                     >
                                         <item.icon className="text-lg" />
                                         <span className="font-medium">{item.name}</span>
-                                    </a>
+                                    </Link>
                                 )
                             )}
                         </MenuItem>

@@ -9,7 +9,7 @@ import Profile from './Profile';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
-  const [login, setLogIn] = useState(false);
+  const [login, setLogIn] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileActiveDropdown, setMobileActiveDropdown] = useState(null);

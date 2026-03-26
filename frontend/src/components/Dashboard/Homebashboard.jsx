@@ -6,6 +6,8 @@ import ChangeEmail from "./User/ChangeEmail";
 import ChangePassword from "./User/ChangePassword";
 import Delete from "./User/Delete";
 import Setting from "./User/Setting";
+import Language from "./User/Language";
+import Notification from "./User/Notification";
 
 import {
   User,
@@ -13,7 +15,9 @@ import {
   Lock,
   Settings,
   Trash2,
-  UserCog
+  UserCog,
+  Languages,
+  Bell
 } from "lucide-react";
 
 export default function HomeBashBoard() {
@@ -25,6 +29,8 @@ export default function HomeBashBoard() {
     { id: "changeInfo", label: "Change Info", icon: UserCog, component: <ChangeInfo /> },
     { id: "changeEmail", label: "Change Email", icon: Mail, component: <ChangeEmail /> },
     { id: "changePassword", label: "Change Password", icon: Lock, component: <ChangePassword /> },
+    { id: "language", label: "Language", icon: Languages, component: <Language /> },
+    { id: "notification", label: "Notification", icon: Bell, component: <Notification /> },
     { id: "delete", label: "Delete Account", icon: Trash2, component: <Delete /> },
     // { id: "setting", label: "Setting", icon: Settings, component: <Setting /> },
   ];

@@ -10,8 +10,7 @@ export default function Profile({ dark, setDark }) {
         { name: "Your profile", href: "#", icon: CgProfile },
         { name: "Theme", href: "#", icon: dark ? MdOutlineLightMode : MdOutlineDarkMode, action: () => setDark(!dark) },
         { name: "Settings", href: "/dashBoard", icon: FiSettings },
-        { name: "Sign out", href: "#", icon: CgLogOut },
-    ]
+        { name: "Sign out", href: "#", icon: CgLogOut, action: () => { setLogIn(false); localStorage.removeItem("token"); navigate("/user-login"); } },    ]
 
     return (
         <div>
@@ -35,7 +34,7 @@ export default function Profile({ dark, setDark }) {
                                 <CgProfile className="text-red-600 dark:text-red-400 text-lg" />
                             </div>
                             <div>
-                                <h1 className="font-semibold text-gray-900 dark:text-white">John Doe</h1>
+                                <h1 className="font-semibold text-gray-900 dark:text-white">Lakshya Sharma</h1>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">Premium Member</p>
                             </div>
                         </div>
@@ -44,7 +43,7 @@ export default function Profile({ dark, setDark }) {
                                 <SiGmail className="text-blue-600 dark:text-blue-400 text-lg" />
                             </div>
                             <div>
-                                <h1 className="text-sm text-gray-700 dark:text-gray-300">john.doe@gmail.com</h1>
+                                <h1 className="text-sm text-gray-700 dark:text-gray-300">laxxy@gmail.com</h1>
                             </div>
                         </div>
                     </div>

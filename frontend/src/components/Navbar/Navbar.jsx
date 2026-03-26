@@ -7,9 +7,10 @@ import {
 } from 'lucide-react';
 import Profile from './Profile';
 import { Link, useLocation } from 'react-router-dom';
+import {useAuth} from '../../Context/Allcontext'
 
 export default function Navbar() {
-  const [login, setLogIn] = useState(true);
+  const {login} = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileActiveDropdown, setMobileActiveDropdown] = useState(null);

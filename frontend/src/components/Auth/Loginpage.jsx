@@ -25,8 +25,9 @@ export default function Loginpage() {
       console.log(formData)
     
       if (response.status==200) {
-     localStorage.setItem('userId',response?.data?.id)
-     localStorage.setItem('userToken',response?.data?.JWT_token)
+        console.log(response.data.token)
+     localStorage.setItem('userId',response?.data?.DB?.id)
+     localStorage.setItem('userToken',response?.data?.token)
         toast.success("Login Successful!");
         
        

@@ -11,7 +11,7 @@ export default function ChangeImg() {
   const userId = localStorage.getItem("userId");
 
   // 🔥 API config
-  const API_KEY = "YOUR_API_KEY";
+  const API_KEY = localStorage.getItem("userToken");
   const BASE_URL = `http://localhost:1234`;
 
   const handleUpload = (e) => {

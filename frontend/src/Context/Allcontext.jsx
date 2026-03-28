@@ -11,7 +11,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 
-  const [login, setLogIn] = useState(false);
+  const [login, setLogIn] = useState(true);
   const [profile, setProfile] = useState({})
 
   const value = { login, setLogIn, profile, setProfile }

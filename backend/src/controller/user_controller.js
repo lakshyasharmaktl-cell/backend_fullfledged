@@ -112,6 +112,7 @@ export const user_login = async (req, res) => {
             name: checkuser.name,
             email: checkuser.email,
             id: checkuser._id,
+            token
 
         }
 
@@ -218,6 +219,9 @@ export const change_profile_img = async (req, res) => {
     try {
         const file = req.file
         const id = req.params.id
+
+        console.log(file)
+        console.log(id)
 
         const checkUser = await user_models.findById(id)
 

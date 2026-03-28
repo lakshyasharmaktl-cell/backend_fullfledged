@@ -10,7 +10,7 @@ export const userSchema = new mongoose.Schema({
         type: String, trim: true, required: [true, 'email is required'], lowercase: true, validate: [validEmail, 'Invalid email']
     },
     gender: {
-        type: String, enum: ['male', 'female', 'other'], trim: true, required: true
+        type: String, enum: ['Male', 'Female', 'Other'], trim: true, required: true
     },
     role: {
         type: String, enum: ['user', 'admin'], trim: true, required: true

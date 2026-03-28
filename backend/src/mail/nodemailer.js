@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
 export const userotpsend = async(email,name,otp) => {
    try {
         const info = await transporter.sendMail({
-            from: `"${process.env.COMPANY_NAME || 'Zupee'}" <${process.env.NODEMAILER_USER}>`,
+            from: `"${process.env.COMPANY_NAME || 'OLA'}" <${process.env.NODEMAILER_USER}>`,
             to: email,
-            subject: `Your OTP for Secure Login - ${process.env.COMPANY_NAME || 'Zupee'}`,
-            text: `Hi ${name},\n\nYour OTP for login is: ${otp}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\n${process.env.COMPANY_NAME || 'Zupee'} Team`,
+            subject: `Your OTP for Secure Login - ${process.env.COMPANY_NAME || 'OLA'}`,
+            text: `Hi ${name},\n\nYour OTP for login is: ${otp}\n\nThis OTP is valid for 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\n${process.env.COMPANY_NAME || 'OLA'} Team`,
             html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -211,7 +211,7 @@ export const userotpsend = async(email,name,otp) => {
     <div class="container">
         <div class="header">
             <div class="bike-icon">🚴‍♂️</div>
-            <h1>Zupee</h1>
+            <h1>OLA</h1>
             <p>Ride Safe, Ride Secure</p>
         </div>
         
@@ -248,16 +248,16 @@ export const userotpsend = async(email,name,otp) => {
             
             <p style="margin-top: 25px;">
                 Happy Riding!<br>
-                <strong>Zupee Team</strong>
+                <strong>OLATeam</strong>
             </p>
         </div>
         
         <div class="footer">
-            <div class="company-name">${process.env.COMPANY_NAME || 'Zupee'}</div>
+            <div class="company-name">${process.env.COMPANY_NAME || 'OLA'}</div>
             <p>Your trusted partner for all biking adventures</p>
             <div class="contact-info">
                 <p>Need help? Contact our support team at ${process.env.SUPPORT_EMAIL || 'support@bikecompany.com'}</p>
-                <p>© ${new Date().getFullYear()} ${process.env.COMPANY_NAME || 'Zupee'}. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} ${process.env.COMPANY_NAME || 'OLA'}. All rights reserved.</p>
             </div>
         </div>
     </div>

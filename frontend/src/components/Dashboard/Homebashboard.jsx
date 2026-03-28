@@ -8,6 +8,7 @@ import Delete from "./User/Delete";
 import Setting from "./User/Setting";
 import Language from "./User/Language";
 import Notification from "./User/Notification";
+import Image from './User/ChangeImg'
 
 import {
   User,
@@ -28,6 +29,7 @@ export default function HomeBashBoard() {
     { id: "profile", label: "Profile", icon: User, component: <Profile /> },
     { id: "changeInfo", label: "Change Info", icon: UserCog, component: <ChangeInfo /> },
     { id: "changeEmail", label: "Change Email", icon: Mail, component: <ChangeEmail /> },
+    { id: "changeImage", label: "Change Image", icon: Mail, component: <Image /> },
     { id: "changePassword", label: "Change Password", icon: Lock, component: <ChangePassword /> },
     { id: "language", label: "Language", icon: Languages, component: <Language /> },
     { id: "notification", label: "Notification", icon: Bell, component: <Notification /> },

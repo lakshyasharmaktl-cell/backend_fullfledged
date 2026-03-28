@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaGlassWhiskey, FaLock, FaEnvelope } from "react-icons/fa";
 import { toast } from "react-toastify";
-
+import axios from "axios";
 
 export default function Loginpage() {
   const navigate = useNavigate();
@@ -20,18 +20,13 @@ export default function Loginpage() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:1234/user_login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post("http://localhost:1234/user_login",formData)
 
-      const data = await response.json();
-
-      if (response.ok) {
-     
+      console.log(formData)
+    
+      if (response.status==200) {
+     localStorage.setItem('userId',response?.data?.id)
+     localStorage.setItem('userToken',response?.data?.JWT_token)
         toast.success("Login Successful!");
         
        
@@ -125,6 +120,8 @@ export default function Loginpage() {
             >
               Sign In to Your Account
             </button>
+
+            
           </form>
 
 

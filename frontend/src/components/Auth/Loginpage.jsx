@@ -22,10 +22,9 @@ export default function Loginpage() {
     try {
       const response = await axios.post("http://localhost:1234/user_login",formData)
 
-      console.log(formData)
     
       if (response.status==200) {
-        console.log(response.data.token)
+
      localStorage.setItem('userId',response?.data?.DB?.id)
      localStorage.setItem('userToken',response?.data?.token)
         toast.success("Login Successful!");

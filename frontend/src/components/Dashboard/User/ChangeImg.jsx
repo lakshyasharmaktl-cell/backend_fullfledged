@@ -36,8 +36,7 @@ export default function ChangeImg() {
     try {
       setLoading(true);
 
-      const res = await axios.put(
-        `${BASE_URL}/change_profile_img/${userId}`,
+      const res = await axios.put(`${BASE_URL}/change_profile_img/${userId}`,
         formData,
         {
           headers: {

@@ -3,14 +3,38 @@ import { CgProfile, CgLogOut } from "react-icons/cg";
 import { SiGmail } from "react-icons/si";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
-import {Link} from 'react-router-dom'
-export default function Profile({ dark, setDark }) {
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
+
+// Added setLogIn to the props
+export default function Profile({ dark, setDark, setLogIn }) {
+    const navigate = useNavigate(); // Initialize navigate
 
     const menuLinks = [
         { name: "Your profile", href: "#", icon: CgProfile },
-        { name: "Theme", href: "#", icon: dark ? MdOutlineLightMode : MdOutlineDarkMode, action: () => setDark(!dark) },
+        { 
+            name: "Theme", 
+            href: "#", 
+            icon: dark ? MdOutlineLightMode : MdOutlineDarkMode, 
+            action: () => setDark(!dark) 
+        },
         { name: "Settings", href: "/dashBoard", icon: FiSettings },
-        { name: "Sign out", href: "#", icon: CgLogOut, action: () => { setLogIn(false); localStorage.removeItem("token"); navigate("/user-login"); } },    ]
+        { 
+            name: "Sign out", 
+            href: "#", 
+            icon: CgLogOut, 
+            action: () => { 
+                // 1. Clear State
+                if (setLogIn) setLogIn(false); 
+                
+                // 2. Clear Storage (Ensure this matches your key name)
+                localStorage.removeItem("userToken"); 
+                localStorage.removeItem("userId"); 
+                
+                // 3. Redirect
+                navigate("/user-login"); 
+            } 
+        },
+    ]
 
     return (
         <div>
@@ -43,7 +67,7 @@ export default function Profile({ dark, setDark }) {
                                 <SiGmail className="text-blue-600 dark:text-blue-400 text-lg" />
                             </div>
                             <div>
-                                <h1 className="text-sm text-gray-700 dark:text-gray-300">laxxy@gmail.com</h1>
+                                <h1 className="text-sm text-gray-700 dark:text-gray-300 text-ellipsis overflow-hidden">laxxy@gmail.com</h1>
                             </div>
                         </div>
                     </div>

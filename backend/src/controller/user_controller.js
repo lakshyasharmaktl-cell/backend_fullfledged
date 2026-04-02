@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { validname } from '../validation/validation.js'
 import { uploadProfileImg, deleteProfileImg } from '../images/upload.js'
+import crypto from 'crypto'
 
 dotenv.config()
 
@@ -220,20 +221,96 @@ export const change_profile_img = async (req, res) => {
         const file = req.file
         const id = req.params.id
 
-        console.log(file)
-        console.log(id)
-
         const checkUser = await user_models.findById(id)
-
         if (!checkUser) return res.status(404).send({ status: false, msg: "user not found" })
 
-        if (checkUser?.profileImg?.asset_id) await deleteProfileImg(checkUser?.profileImg?.asset_id)
+        // ⚠️ NOTE: Deleting won't work perfectly here yet (see below)
+        if (checkUser?.profileImg) await deleteProfileImg(checkUser.profileImg)
 
         const img = await uploadProfileImg(file.path)
-        const DB = await user_models.findByIdAndUpdate(id, { $set: { profileImg: img } }, { new: true })
+        
+        // 🔥 FIX: Only save the string URL to the database
+        const DB = await user_models.findByIdAndUpdate(id, { $set: { profileImg: img.secure_url } }, { new: true })
 
         res.status(200).send({ status: true, msg: "Profile Image Updated Successfully", DB })
     }
     catch (err) { error(err, res) }
-
 }
+
+export const updated_email = async (req, res) => {
+  try {
+    const { new_email } = req.body;
+    const userId = req.user.id;           // from auth middleware
+    const currentEmail = req.user.email;
+    
+    
+    console.log("USER FROM TOKEN:", req.user);
+
+    // Validate new email
+    if (!new_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(new_email)) {
+      return res.status(400).send({ status: false, message: "Invalid email address." });
+    }
+
+    if (new_email === currentEmail) {
+      return res.status(400).send({ status: false, message: "New email must differ from current email." });
+    }
+
+    
+
+    // Generate OTP
+    const otp = generateOTP();
+    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    // Store OTP temporarily
+    otpStore.set(userId, { otp, newEmail: new_email, expiresAt });
+
+    // Send OTP to the CURRENT (previous) email
+    await sendOTPEmail(currentEmail, otp);
+
+    return res.status(200).send({
+      status: true,
+      message: `OTP sent to your current email (${maskEmail(currentEmail)}). Valid for 10 minutes.`,
+    });
+
+  } catch (err) {
+    error(err, res);
+  }
+};
+
+export const verify_email_update = async (req, res) => {
+  try {
+    const { otp } = req.body;
+    const userId = req.user.id;
+
+    
+
+    const record = otpStore.get(userId);
+
+    if (!record) {
+      return res.status(400).json({ success: false, message: "No OTP request found. Please request again." });
+    }
+
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete(userId);
+      return res.status(400).json({ success: false, message: "OTP has expired. Please request a new one." });
+    }
+
+    if (record.otp !== otp) {
+      return res.status(400).json({ success: false, message: "Invalid OTP." });
+    }
+
+    // ✅ OTP verified — update email in DB
+    await User.findByIdAndUpdate(userId, { email: record.newEmail });
+
+    otpStore.delete(userId); // Clear OTP after use
+
+    return res.status(200).json({
+      success: true,
+      message: "Email updated successfully.",
+      new_email: record.newEmail,
+    });
+
+  } catch (err) {
+    error(err, res);
+  }
+};

@@ -12,8 +12,9 @@ cloudinary.config({
 
 export const uploadProfileImg = async (filePath) => {
     try {
-        console.log(filePath)
+        
         const uploadResult = await cloudinary.uploader.upload(filePath,{folder:'ProfileImgs'})
+        
         return uploadResult
 
     } catch (err) {

@@ -3,23 +3,21 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:1234";
 
-// Get user id from your auth (localStorage/context/etc)
-const userId = localStorage.getItem("userId");
-
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-  },
 });
 
 export default function ChangeEmail() {
-  const [step, setStep] = useState(1); // 1 = enter email, 2 = enter OTP
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [maskedEmail, setMaskedEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Get userId and token from localStorage
+  const userId = localStorage.getItem("userId");
+  const userToken = localStorage.getItem("userToken");
 
   // ── STEP 1: Request OTP ──────────────────────────────────────────
   const handleRequestOTP = async (e) => {
@@ -27,10 +25,18 @@ export default function ChangeEmail() {
     setError("");
     setLoading(true);
 
+    if (!userId) {
+      setError("User not found. Please login again.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await axiosInstance.put(`/updated_email/${userId}`, {
-        new_email: email,
-      });
+      const res = await axiosInstance.put(
+        `/updated_email/${userId}`, 
+        { new_email: email },
+        { headers: { 'x-api-key': userToken } }
+      );
 
       setMaskedEmail(res.data.masked_email || "your current email");
       setStep(2); // move to OTP step
@@ -48,16 +54,25 @@ export default function ChangeEmail() {
     setError("");
     setLoading(true);
 
+    if (!userId) {
+      setError("User not found. Please login again.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await axiosInstance.put(`/verify_email_update/${userId}`, {
-        otp,
-      });
+      const res = await axiosInstance.post(
+  `/verify_email_update/${userId}`,
+  { otp },
+  { headers: { 'x-api-key': userToken } }
+);
 
       alert(`✅ ${res.data.message}`);
       // Reset form
       setStep(1);
       setEmail("");
       setOtp("");
+      setMaskedEmail("");
 
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP.");
@@ -130,16 +145,16 @@ export default function ChangeEmail() {
         <form onSubmit={handleVerifyOTP} className="space-y-4">
           <input
             type="text"
-            placeholder="Enter 6-digit OTP"
+            placeholder="Enter 4-digit OTP"
             value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/\D/, "").slice(0, 6))}
+            onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
             maxLength={6}
             required
             className="w-full p-3 rounded-lg bg-zinc-800 border border-zinc-700 outline-none focus:ring-2 focus:ring-indigo-500 tracking-widest text-center text-lg font-mono"
           />
           <button
             type="submit"
-            disabled={loading || otp.length < 6}
+            disabled={loading || otp.length < 4}
             className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 transition p-3 rounded-lg font-medium"
           >
             {loading ? "Verifying..." : "Verify & Update Email"}

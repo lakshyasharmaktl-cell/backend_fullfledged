@@ -3,11 +3,11 @@ import { CgProfile, CgLogOut } from "react-icons/cg";
 import { SiGmail } from "react-icons/si";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { FiSettings } from "react-icons/fi";
-import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 
 // Added setLogIn to the props
 export default function Profile({ dark, setDark, setLogIn }) {
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate(); 
 
     const menuLinks = [
         { name: "Your profile", href: "#", icon: CgProfile },
@@ -26,7 +26,7 @@ export default function Profile({ dark, setDark, setLogIn }) {
                 // 1. Clear State
                 if (setLogIn) setLogIn(false); 
                 
-                // 2. Clear Storage (Ensure this matches your key name)
+                
                 localStorage.removeItem("userToken"); 
                 localStorage.removeItem("userId"); 
                 

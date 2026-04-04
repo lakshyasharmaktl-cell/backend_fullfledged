@@ -18,11 +18,10 @@ routes.get("/auth/google",passport.authenticate("google",{scope:["profile","emai
 routes.get("/auth/google/callback",passport.authenticate("google",{session : false}),user_login_with_google);
 routes.get('/resend_Otp',resend_Otp)
 routes.put('/updated_Profile/:id',user_authorization,updated_Profile)
-routes.put('/updated_email/:id',user_authorization,updated_email)
-// ✅ Correct
-routes.post('/verify_email_update/:id', user_authorization, verify_email_update)
 routes.delete('/delete_profile/:id',user_authorization,delete_Profile)
 routes.put('/change_profile_img/:id',user_authorization,upload.single('profileImg'), change_profile_img)
+routes.put("/updated_email/:id", user_authentication, updated_email)
+routes.post("/verify_email_update/:id", user_authentication, verify_email_update)
 
 //Admin
 import { admin_log_in, get_all_user } from '../controller/admin_controller.js'

@@ -1,37 +1,72 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+const BASE_URL = "http://localhost:1234";
 
 export default function ChangePassword() {
-
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      // ✅ check userId
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        alert("User not logged in. Please login again.");
+        return;
+      }
+
+      // ✅ validation
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert("All fields are required");
+        return;
+      }
 
       if (newPassword !== confirmPassword) {
         alert("Passwords do not match");
         return;
       }
 
-      console.log("Current:", currentPassword);
-      console.log("New:", newPassword);
+      setLoading(true);
 
-      alert("Password changed successfully");
+      // ✅ API call (FIXED)
+      const response = await axios.post(
+        `${BASE_URL}/change_password/${userId}`, // ✅ ID in URL
+        {
+          oldPassword: currentPassword,
+          newPassword,
+          confirmPassword,
+        }
+      );
+
+      // ✅ success
+      alert(response.data.message || "Password changed successfully");
+
+      // ✅ reset
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
 
     } catch (error) {
-
       console.error(error);
-      alert("Something went wrong");
 
+      alert(
+        error.response?.data?.msg ||
+        error.response?.data?.message ||
+        "Something went wrong"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-md bg-zinc-900 text-white p-6 rounded-xl shadow-lg">
-
       <h2 className="text-xl font-semibold mb-5">
         Change Password
       </h2>
@@ -64,13 +99,13 @@ export default function ChangePassword() {
 
         <button
           type="submit"
-          className="w-full bg-indigo-500 hover:bg-indigo-600 transition p-3 rounded-lg font-medium"
+          disabled={loading}
+          className="w-full bg-indigo-500 hover:bg-indigo-600 transition p-3 rounded-lg font-medium disabled:opacity-50"
         >
-          Update Password
+          {loading ? "Updating..." : "Update Password"}
         </button>
 
       </form>
-
     </div>
   );
 }

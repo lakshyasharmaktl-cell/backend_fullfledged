@@ -4,7 +4,7 @@ import { error } from '../error/errorhandling.js'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { validname } from '../validation/validation.js'
+import { validname,validpassword } from '../validation/validation.js'
 import { uploadProfileImg, deleteProfileImg } from '../images/upload.js'
 
 dotenv.config()
@@ -307,7 +307,7 @@ export const updated_email = async (req, res) => {
 
 export const verify_email_update = async (req, res) => {
   try {
-    const userId = req.params.id
+    const id = req.params.id
     const { otp } = req.body
 
     const record = otpStore.get(userId)
@@ -330,3 +330,48 @@ export const verify_email_update = async (req, res) => {
   } 
   catch (err) { error(err, res) }
 }
+
+
+export const change_password = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+
+    // Check if all fields are provided
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return res.status(400).send({  status: false, msg: "All fields are required" });
+    }
+
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {return res.status(400).send({status: false, msg: "New password and confirm password do not match"});
+    }
+
+    // Validate new password strength using your validpassword function
+    if (!validpassword(newPassword)) {return res.status(400).send({status: false,
+        msg: "Invalid password. Please give one lowercase and one uppercase letter with one special character and one number"
+      });
+    }
+
+    // Find user by id
+    const user = await user_models.findById(id);
+    if (!user) {
+      return res.status(404).send({ status: false, msg: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {return res.status(400).send({ status: false,msg: "Old password is incorrect"});
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await user_models.findByIdAndUpdate(id, { password: hashedPassword});
+
+    return res.status(200).send({status: true,msg: "Password changed successfully" });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      status: false,
+      msg: err.message || "Internal server error"
+    });
+  }
+};

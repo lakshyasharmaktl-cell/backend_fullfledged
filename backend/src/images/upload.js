@@ -30,3 +30,23 @@ export const deleteProfileImg = async (AssetsId) => {
   } 
   catch (err) {console.log(err.message);}
 };
+
+export const multipleImgUrl = async (data) => {
+  try {
+    console.log(data[0])
+    const arrImg = []
+    for (let i = 0; i < data.length; i++) {
+      const optimizedBuffer = await sharp(data[i])
+        .resize(1080, 720, { fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 80, mozjpeg: true }).toBuffer();
+      const uploadResult = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${optimizedBuffer.toString('base64')}`,
+        { resource_type: 'auto', quality: 'auto', folder: 'course' });
+      arrImg.push({url: uploadResult.url, AssetsId: uploadResult.asset_id})
+    }
+    return arrImg
+  }
+  catch (err) {
+    console.log(err.message)
+  }
+}

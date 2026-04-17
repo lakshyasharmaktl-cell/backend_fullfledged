@@ -7,7 +7,7 @@ dotenv.config()
 export const user_authentication = (req, res, next) => {
     try {
         const token =  req.headers['x-api-key']  
-        console.log(token)
+
 
         if(!token) return res.status(400).send({ status: false, msg: "token is required!" })
             const decoded = jwt.verify(token, process.env.JWT_token)
@@ -22,6 +22,7 @@ export const user_authorization = (req, res, next) => {
     try {
         const token = req.headers['x-api-key']
         const id = req.params.id;
+        console.log(token)
         
 
         if (!id) return res.status(400).send({ status: false, msg: "id is required!" })

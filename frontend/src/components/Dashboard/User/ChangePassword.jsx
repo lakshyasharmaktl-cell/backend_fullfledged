@@ -13,15 +13,16 @@ export default function ChangePassword() {
     e.preventDefault();
 
     try {
-      // ✅ check userId
       const userId = localStorage.getItem("userId");
-
-      if (!userId) {
-        alert("User not logged in. Please login again.");
+      const token = localStorage.getItem("userToken");
+      
+      // ✅ check login
+      if (!userId || !token) {
+        alert("Session expired. Please login again.");
         return;
       }
 
-      // ✅ validation
+      // ✅ validations
       if (!currentPassword || !newPassword || !confirmPassword) {
         alert("All fields are required");
         return;
@@ -34,26 +35,30 @@ export default function ChangePassword() {
 
       setLoading(true);
 
-      // ✅ API call (FIXED)
+      // ✅ API CALL WITH TOKEN (MAIN FIX)
       const response = await axios.post(
-        `${BASE_URL}/change_password/${userId}`, // ✅ ID in URL
+        `${BASE_URL}/change_password/${userId}`,
         {
           oldPassword: currentPassword,
           newPassword,
           confirmPassword,
+        },
+        {
+          headers: {
+            'x-api-key':token
+          },
         }
       );
 
-      // ✅ success
-      alert(response.data.message || "Password changed successfully");
+      alert(response.data.msg || "Password changed successfully");
 
-      // ✅ reset
+      // ✅ reset fields
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
 
     } catch (error) {
-      console.error(error);
+      console.error("ERROR =>", error);
 
       alert(
         error.response?.data?.msg ||
